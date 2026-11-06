@@ -1,0 +1,156 @@
+/* Home atlas (6-recovery-atlas.md §2, §5). Paper plates with a graduated neatline; one night-edition section.
+   States come from [data-shot]; only opacity and transform transition, plus the station ring's one draw. */
+.logbook { --night: #1d2a35; --night-ink: #eef2f3; --night-line: rgba(238, 242, 243, 0.5); }
+
+.lb-at-paper { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-paper); }
+.lb-at-plate { display: block; width: 100%; height: auto; font-family: var(--sans); }
+.lb-at-master .lb-at-tall { display: none; }
+@media (max-width: 560px) {
+  .lb-at-master .lb-at-wide { display: none; }
+  .lb-at-master .lb-at-tall { display: block; }
+}
+
+/* Drawing */
+.lb-at-neat { fill: none; stroke: var(--hull); stroke-width: 1.2; }
+.lb-at-tick { stroke: var(--hull); stroke-width: 1; }
+.lb-at-plate .lb-contour { fill: none; stroke: var(--sounding); stroke-width: 1.2; }
+.lb-at-hatchline { stroke: var(--sounding); stroke-width: 1.4; }
+.lb-at-no { font-size: 13px; font-weight: 700; fill: var(--hull); }
+.lb-at-planned, .lb-at-built { fill: none; stroke: var(--hull); stroke-width: 2; }
+.lb-at-planned { stroke-dasharray: 6 5; }
+.lb-at-reg { fill: none; stroke: var(--chart); stroke-width: 1.2; }
+.lb-at-note line { stroke: var(--chart); stroke-width: 1; }
+.lb-at-note circle { fill: var(--paper); stroke: var(--chart); stroke-width: 1.5; }
+.lb-at-note text { font-size: 13px; fill: var(--hull); }
+.lb-at-builtnote, .lb-at-next { font-size: 14px; font-weight: 700; fill: var(--hull); }
+.lb-at-cargo { fill: var(--chart); }
+.lb-at-cross { stroke: var(--hull); stroke-width: 1.5; }
+.lb-at-ring { fill: var(--paper); stroke: var(--hull); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.lb-at-dot { fill: var(--hull); }
+.lb-at-pointer { fill: var(--buoy); }
+.lb-at-coord { font-size: 14px; font-weight: 700; fill: var(--hull); }
+.lb-at-coordsub { font-size: 12px; fill: var(--chart); }
+/* Hero focus (PM-03): in the master plate the station and its cargo carry the weight; the soundings step back. */
+.lb-at-master .lb-at-coord { font-size: 17px; }
+.lb-at-master .lb-at-cargo { fill: var(--hull); }
+.lb-at-master .lb-contour, .lb-at-master .lb-at-hatchline { opacity: 0.55; }
+.lb-at-legend text { font-size: 12px; fill: var(--chart); }
+.lb-at-legend line { stroke: var(--hull); stroke-width: 2; }
+.lb-at-legend .lb-at-legend-planned { stroke-dasharray: 6 4; }
+
+/* Shots: I funds at the station · II checks (marks align, callouts open) · III deployed · S3 points onward */
+.lb-at-reg { transform: translate(16px, -12px); opacity: 0.45; }
+.lb-at-note, .lb-at-built, .lb-at-hatch, .lb-at-builtnote, .lb-at-next { opacity: 0; }
+[data-shot='1'] .lb-at-reg, [data-shot='2'] .lb-at-reg, [data-shot='3'] .lb-at-reg { transform: none; opacity: 1; }
+[data-shot='1'] .lb-at-note, [data-shot='2'] .lb-at-note, [data-shot='3'] .lb-at-note { opacity: 1; }
+[data-shot='2'] .lb-at-planned, [data-shot='3'] .lb-at-planned { opacity: 0; }
+[data-shot='2'] :is(.lb-at-built, .lb-at-hatch, .lb-at-builtnote),
+[data-shot='3'] :is(.lb-at-built, .lb-at-hatch, .lb-at-builtnote) { opacity: 1; }
+[data-shot='3'] .lb-at-layers { opacity: 0.35; }
+[data-shot='3'] .lb-at-next { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .lb-at-reg { transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.6s; }
+  .lb-at-planned, .lb-at-built, .lb-at-hatch, .lb-at-layers, .lb-at-next { transition: opacity 0.6s; }
+  .lb-at-note, .lb-at-builtnote { transition: opacity 0.5s; }
+  [data-shot] .lb-at-note-1 { transition-delay: 0.4s; }
+  [data-shot] .lb-at-note-2 { transition-delay: 0.8s; }
+  /* The one automatic moment: the station is drawn once on first paint (0.9 s). */
+  .lb-at-master .lb-at-ring { animation: lb-at-ring 0.9s cubic-bezier(0.4, 0, 0.2, 1) both; }
+  .lb-at-master .lb-at-cross { animation: lb-at-fade 0.9s ease-out both; }
+}
+@keyframes lb-at-ring { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes lb-at-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Controls and caption (the caption is the content; the plate is decoration). */
+.lb-at-master { margin: 0; }
+.lb-at-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); margin-top: var(--s3); }
+.lb-at-nums { display: inline-flex; gap: var(--s1); margin-left: auto; }
+.logbook .lb-at-btn {
+  font: inherit; font-size: 16px; font-weight: 700; min-height: 44px; min-width: 44px; padding: 0 var(--s3);
+  background: var(--paper); color: var(--hull); border: 1.5px solid var(--hull); border-radius: var(--r-paper); cursor: pointer;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .logbook .lb-at-btn { transition: background-color 150ms, color 150ms; }
+}
+.logbook .lb-at-btn[aria-pressed='true'] { background: var(--hull); color: var(--fog); }
+.logbook .lb-at-btn:focus-visible { outline: 3px solid var(--chart); outline-offset: 2px; }
+.lb-at-caption { margin: var(--s3) 0 0; color: var(--chart); font-size: 16px; min-height: 3.2em; max-width: 60ch; }
+
+/* Sections */
+.lb-at-section { border-top: 1px solid var(--rule); padding: var(--s6) 0; }
+.lb-at-head { font-size: 32px; line-height: 1.15; margin: 0 0 var(--s3); font-weight: 800; letter-spacing: -0.01em; }
+.lb-at-lead { color: var(--chart); margin: 0 0 var(--s5); }
+/* The hero's key: the three plates small, each beside its words — a legend, not three more compositions. */
+.lb-at-key { border-top: 1px solid var(--rule); padding: var(--s5) 0; }
+.lb-at-keyhead { font-size: 20px; margin: 0 0 var(--s3); }
+.logbook .lb-at-plates { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s4); }
+.logbook .lb-site .lb-at-plates > li { margin: 0; max-width: none; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: var(--s3); align-items: start; }
+.lb-at-thumb { padding: 2px; }
+.lb-at-plates h3 { margin: 0 0 var(--s1); font-size: 17px; }
+.lb-at-plates p { margin: 0; color: var(--chart); font-size: 15px; }
+@media (min-width: 1024px) {
+  .logbook .lb-at-plates { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); }
+  .logbook .lb-site .lb-at-plates > li { grid-template-columns: 112px minmax(0, 1fr); }
+}
+
+/* Demo: the real tool's paper, one sheet at a time; the tag sits on every sheet. */
+.lb-at-demo { max-width: 960px; }
+.lb-at-demo-nav { display: flex; flex-wrap: wrap; gap: var(--s2); margin: 0 0 var(--s3); }
+.logbook .lb-at-demo-step {
+  font: inherit; font-size: 16px; min-height: 44px; padding: 0 var(--s3); cursor: pointer;
+  background: var(--paper); color: var(--hull); border: 1.5px solid var(--rule); border-radius: var(--r-paper);
+}
+.lb-at-demo-step span { font-weight: 700; }
+.logbook .lb-at-demo-step[aria-pressed='true'] { border-color: var(--hull); background: var(--hull); color: var(--fog); }
+.logbook .lb-at-demo-step:focus-visible { outline: 3px solid var(--chart); outline-offset: 2px; }
+.logbook .lb-at-demo-stills { list-style: none; padding: 0; margin: 0; }
+.logbook .lb-site .lb-at-demo-stills > li { margin: 0; max-width: none; }
+.lb-at-sheet { margin: 0; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-paper); padding: var(--s2); }
+.lb-at-sheet img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); }
+.lb-at-sheet figcaption { display: grid; gap: 2px; padding: var(--s2) var(--s1) var(--s1); }
+.lb-at-sheet figcaption span { color: var(--chart); font-size: 16px; }
+.lb-at-tag { font-size: 14px; color: var(--chart); border-top: 1px dashed var(--rule); padding-top: var(--s1); margin-top: var(--s1); }
+.lb-at-demo-pager { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-top: var(--s3); }
+.lb-at-demo-pager .lb-btn { min-height: 44px; }
+.lb-at-demo-count { color: var(--chart); font-size: 15px; }
+
+/* Night edition: the one dark section, full bleed. Fixed colours so it stays a night chart in dark mode too. */
+.logbook .lb-at-nightsec {
+  background: var(--night); color: var(--night-ink); border-top: 0;
+  box-shadow: 0 0 0 100vmax var(--night); clip-path: inset(0 -100vmax);
+}
+.lb-at-nightsec .lb-at-lead, .lb-at-nightsec dd, .lb-at-region p, .lb-at-block p { color: color-mix(in srgb, var(--night-ink) 82%, var(--night)); }
+.logbook .lb-at-nightsec a { color: var(--night-ink); }
+.logbook .lb-at-nightsec a:focus-visible { outline: 3px solid var(--night-ink); outline-offset: 2px; }
+.lb-at-map { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s4); }
+.lb-at-region { border: 1.5px dashed var(--night-line); border-radius: var(--r-paper); padding: var(--s3) var(--s4); }
+.lb-at-region h3 { margin: 0 0 var(--s2); font-size: 18px; color: var(--night-ink); }
+.lb-at-region p { margin: 0; font-size: 16px; }
+.lb-at-blocks { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s3); }
+.lb-at-block { border: 1.5px solid var(--night-line); border-radius: var(--r-paper); padding: var(--s2) var(--s3); }
+.lb-at-block p { margin: var(--s1) 0 0; font-size: 16px; }
+.lb-at-chdetails { margin: var(--s5) 0 var(--s2); }
+.lb-at-channels-head { color: var(--night-ink); font-weight: 700; font-size: 18px; cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+.lb-at-channels-head:focus-visible { outline: 3px solid var(--night-ink); outline-offset: 2px; }
+.lb-at-channels-head::-webkit-details-marker { display: none; }
+.lb-at-channels-head::before { content: '+'; display: inline-block; width: 1.2em; font-weight: 800; }
+.lb-at-chdetails[open] > .lb-at-channels-head::before { content: '−'; }
+.logbook .lb-at-channels { list-style: none; padding: 0; margin: var(--s2) 0 var(--s4); }
+.lb-at-channels > li { position: relative; padding-left: 2.2em; }
+.lb-at-channels > li::before { content: ''; position: absolute; left: 0; top: 0.8em; width: 1.5em; border-top: 2px solid var(--night-ink); }
+@media (min-width: 900px) {
+  .lb-at-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lb-at-region[data-region='computer'] { grid-row: span 2; }
+  .lb-at-blocks { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The last call to action, back on fog. */
+.lb-at-start { border-top: 1px solid var(--rule); padding: var(--s6) 0 var(--s4); }
+.lb-at-start h2 { font-size: 32px; margin: 0 0 var(--s2); font-weight: 800; }
+.lb-at-start p { color: var(--chart); margin: 0 0 var(--s4); }
+.lb-at-start .lb-btn { display: inline-flex; align-items: center; min-height: 48px; text-decoration: none; }
+
+@media (max-width: 768px) {
+  .lb-at-head, .lb-at-start h2 { font-size: 26px; }
+  .lb-at-section { padding: var(--s5) 0; }
+}

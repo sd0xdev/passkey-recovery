@@ -1,0 +1,195 @@
+# Build, test and scan every push and pull request. Nothing here deploys, publishes, tags or uploads a release:
+# those are maintainer steps (docs/release/release-plan.md, docs/release/deploy-plan.md).
+# Every action is pinned to a full commit SHA; tool versions are pinned below and checked by sha256.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      provenance:
+        description: Also rebuild the bundled contract bytecode from upstream sources (slow)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NPM_VERSION: 11.19.1
+  GITLEAKS_VERSION: 8.30.1
+  GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+  # Must equal ANVIL_PINS['linux-x64'] in server/runner/anvil.ts.
+  ANVIL_LINUX_X64_SHA256: 10c1c727d6c1de973aeb160e59875b9a9a23464d6e74149ee8abb30b3500311b
+  npm_config_fund: 'false'
+  npm_config_update_notifier: 'false'
+
+jobs:
+  checks:
+    name: Typecheck, unit, build, licenses, scans
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm install -g --ignore-scripts npm@${NPM_VERSION}
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run test
+      - run: npm run build
+      - run: npm run build:hosted
+      - name: License check (shipped npm packages and upstream notices)
+        run: npm run release:licenses
+      - name: Dependency audit
+        run: npm audit --audit-level=high
+      - name: Secret and privacy scan of the public file set
+        run: |
+          node scripts/release/export.mjs "$RUNNER_TEMP/public" --force
+          node scripts/release/scan.mjs "$RUNNER_TEMP/public" --json "$RUNNER_TEMP/scan.json"
+      - name: gitleaks (history and working tree)
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/gitleaks.tgz" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/gitleaks.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/gitleaks.tgz" -C "$RUNNER_TEMP" gitleaks
+          "$RUNNER_TEMP/gitleaks" git --config .gitleaks.toml --redact --no-banner .
+          "$RUNNER_TEMP/gitleaks" dir --config .gitleaks.toml --redact --no-banner "$RUNNER_TEMP/public"
+      - name: Wrangler dry run (no upload, no login)
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: XDG_CONFIG_HOME="$RUNNER_TEMP/wrangler-home" npx wrangler deploy --dry-run
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: scan-report
+          path: ${{ runner.temp }}/scan.json
+          if-no-files-found: ignore
+
+  clean-export:
+    name: Build and test the exported public tree alone
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: npm install -g --ignore-scripts npm@${NPM_VERSION}
+      - run: node scripts/release/export.mjs "$RUNNER_TEMP/public" --force
+      - working-directory: ${{ runner.temp }}/public
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+          npm run build:hosted
+          npm run test
+
+  integration:
+    name: Integration (synthetic Anvil test chain)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm install -g --ignore-scripts npm@${NPM_VERSION}
+      - run: npm ci --ignore-scripts
+      - name: Put the pinned Anvil on PATH
+        run: |
+          dir="$PWD/node_modules/@foundry-rs/anvil-linux-amd64/bin"
+          echo "${ANVIL_LINUX_X64_SHA256}  $dir/anvil" | sha256sum -c -
+          chmod +x "$dir/anvil"
+          echo "$dir" >> "$GITHUB_PATH"
+      - run: anvil --version
+      - run: npm run build
+      - run: npm run test:integration
+
+  e2e:
+    name: End-to-end, accessibility, hosted and local walkthroughs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm install -g --ignore-scripts npm@${NPM_VERSION}
+      - run: npm ci --ignore-scripts
+      - name: Put the pinned Anvil on PATH
+        run: |
+          dir="$PWD/node_modules/@foundry-rs/anvil-linux-amd64/bin"
+          echo "${ANVIL_LINUX_X64_SHA256}  $dir/anvil" | sha256sum -c -
+          chmod +x "$dir/anvil"
+          echo "$dir" >> "$GITHUB_PATH"
+      - name: Install Chromium for the pinned Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Playwright (pairing, secret flow, invalid source, runtime mismatch, both keystore sources, native File gas journey)
+        run: npm run test:e2e
+        env:
+          E2E_SHOT_DIR: ${{ runner.temp }}/shots
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: e2e-results
+          path: |
+            playwright-report/
+            test-results/
+            ${{ runner.temp }}/shots/
+          if-no-files-found: ignore
+
+  pack-smoke:
+    name: Runner package (npm pack + npm exec in a clean folder)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm install -g --ignore-scripts npm@${NPM_VERSION}
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - run: npm run release:pack-smoke -- --out release-out
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: runner-package
+          path: release-out/
+
+  provenance:
+    name: Rebuild contract bytecode from upstream (on demand)
+    if: github.event_name == 'workflow_dispatch' && inputs.provenance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - uses: foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf # v1.9.2
+        with:
+          version: v1.7.1
+      - run: npm run release:rebuild-contracts

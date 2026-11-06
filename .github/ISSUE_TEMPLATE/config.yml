@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/sd0xdev/passkey-recovery/security
+    about: Report privately. Never post details, keys, passwords, keystores or transaction data in a public issue.

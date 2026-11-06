@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Passkey Recovery by sd0x — bridge (preview)",
+  "version": "0.1.0",
+  "description": "After you click its button on keys.coinbase.com/connect, asks your passkey to sign one request from your local Passkey Recovery page.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn51DdeHN+4/50FSRRhpsnWOyPTTH4NxWm7be89mfBV96x5SUC/LIMTjMj7lZwQB6b24eSuhlgkfWcgz7g0BBdrgmoQIUqzi5hfsUnbhwhbrdZzAAvjgRLEM15bpN97XUXrFUm5UjJQTG29nwzcFW+CI1KYQgk21LCXxXJl4KGkf1SYmRu1lHij7vZoO4SQHcBBf0KvMIJdbD78+xlTZ+EdCdUMJupd6NHR5tulP5GqW0QGUrzg9QaFc3sg34kMPYOsqpGbyFaOJENMZRODhXDz3Y7Ct3yFpOrcMpDWsp+pClFwcnsNMlJpcE6u9pFzYsjBd7XEaPSQPy3JNf1SuhZwIDAQAB",
+  "minimum_chrome_version": "120",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": { "default_title": "Passkey Recovery" },
+  "background": { "service_worker": "sw.js", "type": "module" },
+  "externally_connectable": { "matches": ["http://127.0.0.1:4173/*"] }
+}

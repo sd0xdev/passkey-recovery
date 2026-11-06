@@ -1,0 +1,168 @@
+/* Website (design guidelines §13.2, Chart & Course). Same Logbook tokens; the additions are `--sounding` (chart
+   depth lines and figures only — never text a reader needs), the 800 display weight (site only), the site's
+   18px reading size and one buoy CTA per page. The plate on Home is the one drawn thing; everything else is
+   ruled paper. */
+.logbook { --sounding: #c9d7dd; }
+@media (prefers-color-scheme: dark) {
+  .logbook { --sounding: #34505f; }
+}
+
+/* ── Site header: brand, pages, language, the tool. Sticky on wide screens only (it wraps on narrow ones). ── */
+.lb-site-top { justify-content: flex-start; }
+.lb-site-top .lb-brand { color: var(--hull); text-decoration: none; min-height: 44px; align-items: center; margin-right: auto; }
+.lb-site-top .lb-brand[aria-current='page'] b { border-bottom: 3px solid var(--hull); }
+.lb-site-nav { display: flex; flex-wrap: wrap; gap: 0 var(--s4); }
+.lb-site-nav a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s1);
+  color: var(--hull); text-decoration: none; border-bottom: 3px solid transparent;
+}
+.lb-site-nav a:hover { border-bottom-color: var(--rule); }
+.lb-site-nav a[aria-current='page'] { font-weight: 700; border-bottom-color: var(--hull); }
+.lb-site-menu { display: flex; align-items: center; gap: var(--s4); }
+.lb-site-lang { margin-left: var(--s4); }
+.logbook .lb-site-menu-btn { display: none; }
+.logbook .lb-site-open {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s4);
+  border: 2px solid var(--hull); border-radius: var(--r-glass); color: var(--hull); font-weight: 700; text-decoration: none;
+}
+.logbook .lb-site-open[aria-current='page'] { background: var(--hull); color: var(--fog); }
+@media (min-width: 769px) {
+  /* The sticky header never hides a focused element or an #anchor target (WCAG 2.4.11). */
+  html { scroll-padding-top: 5.5rem; }
+}
+
+/* ── The tool's own toolbar, under the site header on /recover only ── */
+.lb-toolbar {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--s2) var(--s4);
+  padding: 0 0 var(--s3); margin: 0 0 var(--s5); border-bottom: 1px solid var(--rule);
+}
+.lb-tool .lb-title:focus { outline: none; }
+.lb-status-note { margin: 0 0 var(--s3); }
+
+/* ── Site pages ── */
+.lb-site { max-width: 1240px; font-size: 18px; line-height: 1.55; }
+.logbook:lang(zh-Hant-TW) .lb-site { line-height: 1.75; }
+.lb-site :is(p, li, dd) { max-width: 68ch; }
+.logbook:lang(zh-Hant-TW) .lb-site :is(p, li, dd) { max-width: 36em; }
+.lb-site h1:focus { outline: none; }
+.lb-site h3 { font-size: 19px; margin: var(--s4) 0 var(--s1); }
+.lb-site :is(ul, ol) { padding-left: 1.25em; margin: var(--s2) 0; }
+.lb-site li + li { margin-top: var(--s2); }
+
+/* Hero: headline, CTAs and scope on the left (5 cols), the master plate beside it (1440) or below it (768, 390). */
+.lb-chart-hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s6); padding: var(--s4) 0 var(--s7); align-items: start; }
+@media (min-width: 1100px) {
+  .lb-chart-hero { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s6); align-items: center; }
+}
+.lb-display {
+  font-weight: 800; font-size: clamp(2.6rem, 6.4vw + 0.6rem, 6.25rem); line-height: 0.98; letter-spacing: -0.022em;
+  margin: 0; max-width: 14ch; text-wrap: balance;
+}
+.logbook:lang(zh-Hant-TW) .lb-display { line-height: 1.12; letter-spacing: 0; max-width: 11em; }
+@media (min-width: 1100px) {
+  .lb-display { font-size: clamp(2.6rem, 3.2vw + 0.6rem, 4.5rem); }
+  .logbook:lang(zh-Hant-TW) .lb-display { font-size: clamp(2.3rem, 2.7vw + 0.5rem, 3.8rem); }
+}
+.lb-hero-sub { font-size: 20px; color: var(--chart); margin: var(--s5) 0 var(--s5); max-width: 52ch; }
+.lb-hero-actions { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; }
+.lb-hero-actions .lb-btn { display: inline-flex; align-items: center; text-decoration: none; min-height: 48px; }
+.lb-hero-limits { margin: var(--s3) 0 0; font-size: 16px; color: var(--chart); }
+
+.lb-page-head { padding: var(--s4) 0 var(--s5); }
+.lb-page-title { font-size: 44px; line-height: 1.1; margin: 0; letter-spacing: -0.015em; font-weight: 800; }
+.lb-page-lead { font-size: 20px; color: var(--chart); margin: var(--s3) 0 0; }
+
+/* A heading in the left margin beside its text, like a logbook column. */
+.lb-folio { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s2); border-top: 1px solid var(--rule); padding: var(--s5) 0; }
+.lb-folio-head { font-size: 22px; line-height: 1.3; margin: 0; }
+.lb-folio-body > :first-child { margin-top: 0; }
+@media (min-width: 1024px) {
+  .lb-folio { grid-template-columns: 15rem minmax(0, 1fr); gap: var(--s6); }
+  .lb-folio-head { font-size: 18px; color: var(--chart); }
+}
+
+.lb-ledger { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--s4); }
+.lb-ledger-col { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-paper); padding: var(--s3) var(--s4); }
+.lb-ledger-col h3 { margin-top: 0; }
+.lb-ledger-yes { border-left: 4px solid var(--kelp); }
+.lb-ledger-yes h3 span { color: var(--kelp); }
+.lb-ledger-no { border-left: 4px solid var(--flare); }
+.lb-ledger-no h3 span { color: var(--flare); }
+
+/* Where this page is (PM-04): one hull rule on the left, like the tool's "your turn" notice. */
+.lb-mode-note { border-left: 3px solid var(--hull); padding: var(--s1) 0 var(--s1) var(--s3); margin: 0 0 var(--s4); }
+.lb-mode-note h3 { margin: 0 0 var(--s1); }
+.lb-mode-note p { margin: 0 0 var(--s2); }
+
+/* Inner pages keep a little of the atlas: the plate's graduated neatline under the page title (PM-03). */
+.lb-page-head { position: relative; padding-bottom: var(--s4); }
+.lb-page-head::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 8px; border-top: 1.2px solid var(--hull);
+  background: repeating-linear-gradient(90deg, var(--hull) 0 1px, transparent 1px 24px) top / 100% 6px no-repeat;
+}
+
+/* Status ledger: label, then the value; only values are mono. */
+.lb-status-ledger { margin: 0; }
+.lb-status-ledger > div { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 var(--s5); padding: var(--s2) 0; border-top: 1px solid var(--rule); }
+.lb-status-ledger > div:first-child { border-top: 0; padding-top: 0; }
+.lb-status-ledger dt { color: var(--chart); }
+.lb-status-ledger dd { margin: 0; }
+@media (min-width: 640px) {
+  .lb-status-ledger > div { grid-template-columns: 9rem minmax(0, 1fr); }
+}
+
+.lb-faq details { border-top: 1px solid var(--rule); }
+.lb-faq details:last-child { border-bottom: 1px solid var(--rule); }
+.lb-faq summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: var(--s2); font-weight: 700; padding: var(--s2) 0; }
+.lb-faq summary:focus-visible { outline: 3px solid var(--chart); outline-offset: 2px; }
+.lb-faq details p { margin: 0 0 var(--s4); }
+
+.logbook .lb-numbered { list-style: none; counter-reset: n; padding-left: 0; }
+.logbook .lb-numbered > li { counter-increment: n; position: relative; padding-left: 2.6em; }
+.lb-numbered > li::before {
+  content: counter(n); position: absolute; left: 0; top: 0.1em; width: 1.8em; height: 1.8em; border-radius: 50%;
+  display: grid; place-items: center; font-family: var(--mono); font-size: 14px; font-weight: 700; border: 1.5px solid var(--hull);
+}
+.lb-numbered > li > h3 { margin-top: 0; }
+.lb-numbered-tight > li + li { margin-top: var(--s3); }
+.logbook .lb-promises { list-style: none; padding-left: 0; }
+.lb-promises > li { position: relative; padding-left: 1.8em; }
+.lb-promises > li::before { content: '✓'; position: absolute; left: 0; font-weight: 700; color: var(--kelp); }
+
+.lb-defs { margin: var(--s3) 0; }
+.lb-defs dt { font-weight: 700; }
+.lb-defs dd { margin: 0 0 var(--s3); }
+.lb-defs-inline { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--s2) var(--s4); }
+.lb-defs-inline dt { font-weight: 400; color: var(--chart); }
+.lb-defs-inline dd { margin: 0; }
+.lb-command { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--s2); align-items: start; max-width: 80ch; }
+.lb-command .lb-code-block { margin: var(--s2) 0; font-size: 15px; }
+.lb-command .lb-copy { margin-top: var(--s2); }
+.lb-callout { border-left: 4px solid var(--flare); padding-left: var(--s3); font-weight: 700; }
+.lb-notfound-links { font-size: 20px; }
+
+@media (max-width: 768px) {
+  /* One row on a phone: brand, Menu, language, the tool. The menu opens below with the pages. */
+  .logbook .lb-site-top { flex-wrap: wrap; gap: var(--s1); padding-left: 10px; padding-right: 10px; }
+  .lb-site-top .lb-brand { font-size: 14px; white-space: nowrap; gap: 0; }
+  .logbook .lb-site-menu-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; font-size: 14px; }
+  .logbook .lb-site-lang { min-height: 44px; margin-left: 0; padding: 0 8px; font-size: 14px; }
+  .logbook .lb-site-open { padding: 0 10px; font-size: 14px; white-space: nowrap; }
+  .lb-site-menu { display: none; order: 3; flex-basis: 100%; flex-direction: column; align-items: flex-start; gap: var(--s2); padding-bottom: var(--s2); }
+  .lb-site-menu[data-open='true'] { display: flex; }
+  .lb-site-nav { flex-direction: column; }
+  .lb-chart-hero { padding: var(--s2) 0 var(--s6); gap: var(--s5); }
+  .lb-hero-sub { font-size: 18px; }
+  .lb-page-title { font-size: 32px; }
+  .lb-site { font-size: 17px; }
+}
+@media (max-width: 420px) {
+  /* The brand takes two lines so brand, Menu, language and the tool stay one row at 390 px (narrower, the tool wraps below; nothing scrolls sideways). */
+  .lb-site-top .lb-brand { white-space: normal; max-width: 9em; line-height: 1.15; }
+}
+@media (max-width: 560px) {
+  .lb-command { grid-template-columns: minmax(0, 1fr); }
+  .lb-command .lb-copy { margin-top: 0; }
+  .lb-defs-inline { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .lb-defs-inline dd { margin-bottom: var(--s2); }
+}

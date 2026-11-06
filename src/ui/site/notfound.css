@@ -1,0 +1,18 @@
+/* The static 404 page (404.html): no script, the Logbook palette, both languages. */
+@import '@fontsource/atkinson-hyperlegible-next/400.css';
+@import '@fontsource/atkinson-hyperlegible-next/800.css';
+:root { color-scheme: light dark; --fog: #eef2f3; --hull: #1d2a35; --chart: #3f5b73; --rule: rgba(63, 91, 115, 0.3); }
+@media (prefers-color-scheme: dark) {
+  :root { --fog: #121b22; --hull: #e6ecef; --chart: #9db4c6; --rule: rgba(157, 180, 198, 0.3); }
+}
+body { margin: 0; background: var(--fog); color: var(--hull); font: 18px/1.55 'Atkinson Hyperlegible Next', system-ui, sans-serif; }
+.nf { max-width: 44rem; margin: 0 auto; padding: 48px 24px; }
+.nf-brand { font-weight: 700; margin: 0 0 32px; }
+.nf h1, .nf h2 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 12px; }
+.nf section + section { border-top: 1px solid var(--rule); margin-top: 32px; padding-top: 32px; }
+.nf [lang='zh-Hant-TW'] { line-height: 1.75; font-family: 'Atkinson Hyperlegible Next', 'PingFang TC', 'Noto Sans TC', sans-serif; }
+.nf [lang='zh-Hant-TW'] h2 { letter-spacing: 0; line-height: 1.2; }
+.nf p { color: var(--chart); }
+.nf ul { padding-left: 1.25em; }
+.nf li + li { margin-top: 8px; }
+.nf a { color: var(--chart); text-underline-offset: 3px; display: inline-flex; align-items: center; min-height: 44px; }

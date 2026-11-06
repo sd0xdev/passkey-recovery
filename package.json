@@ -1,0 +1,93 @@
+{
+  "name": "passkey-recovery",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Passkey Recovery by sd0x: an open-source tool you run on your own computer to deploy a missing Coinbase Smart Wallet v1.1 on Plasma and move your own funds. Independent; not affiliated with Coinbase or Plasma.",
+  "license": "Apache-2.0",
+  "author": "sd0x (https://github.com/sd0xdev)",
+  "homepage": "https://github.com/sd0xdev/passkey-recovery#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sd0xdev/passkey-recovery.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sd0xdev/passkey-recovery/issues"
+  },
+  "keywords": [
+    "passkey",
+    "webauthn",
+    "erc-4337",
+    "coinbase-smart-wallet",
+    "plasma",
+    "recovery"
+  ],
+  "bin": {
+    "passkey-recovery": "dist-server/runner.mjs"
+  },
+  "files": [
+    "dist/",
+    "dist-server/",
+    "registry/",
+    "licenses/",
+    "README.md",
+    "README.zh-TW.md",
+    "LICENSE",
+    "NOTICE",
+    "THIRD_PARTY_NOTICES.md",
+    "SECURITY.md"
+  ],
+  "packageManager": "npm@11.19.1",
+  "engines": {
+    "node": ">=24.22.1 <25",
+    "npm": ">=11.19.1 <12"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
+    "start": "npm run build && node dist-server/sidecar.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:live": "vitest run --config vitest.live.config.mts",
+    "build": "tsc --noEmit -p tsconfig.json && vite build && vite build -c vite.server.config.mts",
+    "signer": "node dist-server/signer.mjs",
+    "test:integration": "vitest run --config vitest.integration.config.mts",
+    "preview": "npm run build && node dist-server/runner.mjs",
+    "preview:static": "vite preview --host 127.0.0.1 --port 4181 --strictPort",
+    "runner": "node dist-server/runner.mjs",
+    "build:hosted": "vite build --mode hosted --outDir dist-hosted",
+    "release:licenses": "node scripts/release/licenses.mjs --check",
+    "release:scan": "node scripts/release/scan.mjs",
+    "release:export": "node scripts/release/export.mjs",
+    "release:pack-smoke": "node scripts/release/pack-smoke.mjs",
+    "release:rebuild-contracts": "node scripts/release/rebuild-contracts.mjs",
+    "deploy:dry-run": "npm run build:hosted && wrangler deploy --dry-run"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@fontsource/atkinson-hyperlegible-mono": "5.3.0",
+    "@fontsource/atkinson-hyperlegible-next": "5.3.0",
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.5",
+    "wrangler": "4.156.0"
+  },
+  "dependencies": {
+    "@noble/curves": "2.4.0",
+    "@noble/hashes": "2.4.0",
+    "viem": "2.57.13"
+  },
+  "optionalDependencies": {
+    "@foundry-rs/anvil-darwin-amd64": "1.7.1",
+    "@foundry-rs/anvil-darwin-arm64": "1.7.1",
+    "@foundry-rs/anvil-linux-amd64": "1.7.1",
+    "@foundry-rs/anvil-linux-arm64": "1.7.1",
+    "@foundry-rs/anvil-win32-amd64": "1.7.1"
+  }
+}

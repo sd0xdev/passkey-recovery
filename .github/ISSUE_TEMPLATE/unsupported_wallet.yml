@@ -1,0 +1,31 @@
+name: Wallet or chain not supported
+description: Your wallet or situation is not covered (another chain, wallet brand or version).
+labels: [support]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Passkey Recovery supports **Coinbase Smart Wallet v1.1 on Plasma (9745)** only. This form helps decide what to support next; it is not a recovery service.
+        Beware of anyone who contacts you offering to recover funds. Do not share a full address or any secret here.
+  - type: input
+    id: wallet
+    attributes:
+      label: Wallet and version
+      placeholder: Coinbase Smart Wallet v1.0
+    validations: { required: true }
+  - type: input
+    id: chain
+    attributes:
+      label: Chain where the funds are
+    validations: { required: true }
+  - type: dropdown
+    id: passkey
+    attributes:
+      label: Do you still have the passkey?
+      options: ["Yes", "No", "Not sure"]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: How the funds arrived and what the tool told you (no addresses or transaction hashes).

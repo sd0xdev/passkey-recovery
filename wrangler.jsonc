@@ -1,0 +1,19 @@
+// Cloudflare Workers Static Assets for the hosted website (assets only: no Worker script, no bindings).
+// The build is `npm run build:hosted` (dist-hosted/, with its _headers file). Nothing here deploys anything:
+// deploying is a maintainer step, see docs/release/deploy-plan.md. Wrangler is pinned in package.json.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "passkey-recovery",
+  "compatibility_date": "2026-10-30",
+  "assets": {
+    "directory": "./dist-hosted",
+    // Real paths (design guidelines §13.3): each page is its own <path>/index.html (written by the hosted build),
+    // served at <path> without a trailing slash; anything else gets 404.html with status 404. No SPA fallback,
+    // so a missing download or asset is never answered with the app.
+    "not_found_handling": "404-page",
+    "html_handling": "drop-trailing-slash"
+  },
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": false }
+}

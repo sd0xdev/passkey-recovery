@@ -1,0 +1,26 @@
+Passkey Recovery by sd0x
+Copyright 2026 sd0x (https://github.com/sd0xdev)
+
+This product's own source code is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This repository and its release artifacts also contain third-party material that keeps its own
+license and is NOT relicensed under Apache-2.0:
+
+- Coinbase Smart Wallet v1.1.0 deployment bytecode (registry/coinbase-smart-wallet-v1.1/).
+  Its sources are MIT (Coinbase, Solady, webauthn-sol, FreshCryptoLib, OpenZeppelin), and it also
+  compiles in GPL-3.0 interface and helper files from eth-infinitism/account-abstraction v0.6.0.
+  Corresponding source and rebuild steps: registry/coinbase-smart-wallet-v1.1/SOURCE.md.
+- ERC-4337 EntryPoint v0.6 runtime code (test/fixtures/infra-code.json, test fixture only),
+  GPL-3.0 (with one LGPL-3.0-only and several GPL-3.0-only files), eth-infinitism/account-abstraction v0.6.0.
+- Safe Singleton Factory runtime code (test/fixtures/infra-code.json, test fixture only), MIT
+  (safe-global/safe-singleton-factory), based on Arachnid/deterministic-deployment-proxy (Unlicense).
+- Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono fonts, SIL Open Font License 1.1.
+- npm packages bundled into the UI or installed by the runner (React, viem, noble, scure and others),
+  MIT; the pinned Anvil binaries (Foundry), MIT OR Apache-2.0.
+
+The full list, versions, upstream commits and license texts are in THIRD_PARTY_NOTICES.md and the
+licenses/ directory.
+
+Passkey Recovery is an independent project. It is not affiliated with, endorsed by, or supported by
+Coinbase or Plasma. "Coinbase" and "Plasma" are names of their respective owners, used here only to
+describe compatibility.

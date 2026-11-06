@@ -1,0 +1,49 @@
+name: Bug report
+description: Something in the website, the local runner or the guide does not work as described.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste** a seed phrase, private key, keystore, password, 1Password link, passkey data, RPC URL with a key, or a full wallet address. The maintainer will never ask for them.
+        Use the **AI report** button in the tool for a redacted summary instead; check it before pasting.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options: [Website (hosted), Local runner, Bookmarklet, DevTools fallback, Documentation]
+    validations: { required: true }
+  - type: dropdown
+    id: gas
+    attributes:
+      label: Gas wallet mode
+      options: [Not relevant, Browser wallet, File (browser), File (native), 1Password, Existing gas wallet]
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "`passkey-recovery --version`, or the version shown on the Download page"
+    validations: { required: true }
+  - type: input
+    id: env
+    attributes:
+      label: OS and browser
+      placeholder: macOS 27, Chrome 150
+  - type: textarea
+    id: steps
+    attributes:
+      label: What you did and what happened
+      description: The step you were on, the message shown, and what you expected.
+    validations: { required: true }
+  - type: textarea
+    id: report
+    attributes:
+      label: Redacted AI report (optional)
+      render: text
+  - type: checkboxes
+    id: safe
+    attributes:
+      label: Safety
+      options:
+        - label: This issue contains no secrets, keys, passwords, passkey data or full addresses.
+          required: true

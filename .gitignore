@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Build / test artifacts
+dist/
+dist-ssr/
+dist-server/
+dist-hosted/
+.e2e-build/
+build/
+coverage/
+*.tsbuildinfo
+.vite/
+.vitest/
+test-results/
+playwright-report/
+.wrangler/
+release-out/
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local signing exports / session runtime (authorization data — never commit)
+exports/
+*.assertion.json
+*.signature.json
+*.userop.signed.json
+cbpr-proof-report-*.json
+.local/
+.runtime/
+*.log
+npm-debug.log*
+
+# Claude local-only state
+.claude/settings.local.json
+.sd0x/local/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Claude local verify cache
+.claude/cache/
