@@ -1,15 +1,30 @@
 # gitleaks configuration for CI (.github/workflows/ci.yml). Default rules plus a narrow allowlist of values that are
-# public by design: the well-known Anvil/Hardhat development keys of the local test chain, and the synthetic markers
-# used by the unit and end-to-end tests. Anything else that looks like a secret fails the build.
+# public or synthetic by design: the well-known Anvil/Hardhat development keys of the local test chain, the synthetic
+# markers used by the unit and end-to-end tests, the bridge extension's public key, and the exact upstream pins of
+# scripts/release/rebuild-contracts.mjs. Every entry is matched against the secret itself; nothing is exempted by
+# path or by line shape. Anything else that looks like a secret fails the build.
 [extend]
 useDefault = true
 
-[allowlist]
-description = "Public Anvil dev keys and synthetic test markers"
+[[allowlists]]
+description = "Public Anvil dev keys, synthetic test markers, the extension public key and the contract rebuild pins"
 regexes = [
   '''ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80''',
   '''59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d''',
   '''5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a''',
   '''FAKEKEY[A-Za-z0-9_-]*''',
   '''E2eSyntheticPathKey[A-Za-z0-9_-]*''',
+  '''SyntheticKey[A-Za-z0-9_-]*''',
+  # extension/manifest.json "key": the RSA public key (base64 DER SubjectPublicKeyInfo) that pins the extension id.
+  '''MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA[A-Za-z0-9+/=]+''',
+  # scripts/release/rebuild-contracts.mjs PINS, exact values only: upstream git commits, the npm tarball sha1 and the
+  # canonical EntryPoint v0.6 SenderCreator address.
+  '''^a8c6456f3a6d5d2dea08d6336b3be13395cacd42$''',
+  '''^abff2aca61a8f0934e533d0d352978055fddbd96$''',
+  '''^c4c96607cb3aa3807b14c81ae2015bcba061f8fc$''',
+  '''^619f20ab0f074fef41066ee4ab24849a913263b2$''',
+  '''^76f3f135b7b27d2aa519f265b56bfc49a2573ab5$''',
+  '''^5705e8208bc92cd82c7bcdfeac8dbc7377767d96$''',
+  '''^7fc98430eaedbb6070b35b39d798725049088348$''',
+  '''^6854c37df205dd2c056bdfa1b853f5d732109109$''',
 ]
