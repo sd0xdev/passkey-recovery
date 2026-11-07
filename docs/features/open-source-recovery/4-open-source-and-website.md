@@ -76,7 +76,7 @@
 /guide          步驟：網站與本機 runner、bookmarklet 主流程、DevTools fallback、gas 模式
 /how-it-works   架構與信任邊界；開頭說明「你正在哪裡閱讀」（依 pageKind，6-recovery-atlas.md §10.4）
 /security       安全模型、回報方式、非官方聲明
-/download       目前有什麼（原始碼已公開、Runner Release 尚未發布、網站尚未部署）、git clone→Node／npm→npm ci／build→npm run runner、本機打包 npm pack／sha256／npm exec、發布之後（規劃中）的 Release 網址（文字）；見 6-recovery-atlas.md §10.5
+/download       目前有什麼（原始碼已公開、Runner Release 尚未發布、網站只有靜態頁面）、git clone→Node／npm→npm ci／build→npm run runner、本機打包 npm pack／sha256／npm exec、發布之後（規劃中）的 Release 網址（文字）；見 6-recovery-atlas.md §10.5
 其他            Not found 頁（hosted 與 runner 都回 HTTP 404）
 ```
 

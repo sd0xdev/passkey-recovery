@@ -24,7 +24,7 @@ aad55b2b4da4a0b6ea747d33209eaed1f039e752733f078a27e688c504724251  docs/features/
 0a9102e8eb9ca08761e3f1dd877e3de08236aa967382af6cf14731a817572605  docs/features/open-source-recovery/1-requirements.md
 a72518989b19ae368229b471bc8ab9b0ed10bcf99acb900e2896aad2c7539053  docs/features/open-source-recovery/2-tech-spec.md
 9d63dd3924e27b5525f708133311cb15a79f3107320be85a29a642000142e577  docs/features/open-source-recovery/3-architecture.md
-9d8775cfebd1c2e6ccdfc7ba3a28a1913ebeccda7f172d9ca6d2a3bd3d65c8e0  docs/features/open-source-recovery/4-open-source-and-website.md
+e0c87647f12729a1adad4d2f6c4d4e205a44365a63482e09b52f0cff84d29902  docs/features/open-source-recovery/4-open-source-and-website.md
 5d905c9ab9d8cd5f81fe4bc805f6615efc297d18206d40a0fb8ebeb488f3b1c7  docs/features/open-source-recovery/5-hosted-local-runner.md
 e29f9f7951c4cc2b2ac5e077c3013909a4d02c90b2cda89bf2dfcfd64e0de8a6  docs/features/open-source-recovery/6-recovery-atlas.md
 ed2f60d4fb5d1aa75552047fd266ae061855807195626256925e42c324ce8029  docs/features/open-source-recovery/adr-001-no-console-signing.md
@@ -35,7 +35,7 @@ ebf478368d3e711159387d99450132a0fa36c17bcb9e6b816f2c10d73af1f633  docs/features/
 b4f27dd9f2b7948431f1a5fe9630f915152173793893e850482b77c8d782f1df  docs/features/open-source-recovery/design-ui-ux-guidelines.md
 d61a67dfcd21f5f09e23d6ea27872a146237a3ddedebdab6e7819d8abfffbd57  docs/features/open-source-recovery/intent-open-source-recovery.md
 466dff63ca505ae5237a936760dc314f9c7a90dee1fdccfd3edb71abb5c9a6e7  docs/features/open-source-recovery/runbook-ai-collaboration.md
-a310e6a4de8234355c9ee2798c05a426175d7aef6e3ab73dd60c58c403c1b611  docs/release/deploy-plan.md
+d34503f26d10b23a9c722277b9c27bb276488484a3d53f3ed511dee3e6853375  docs/release/deploy-plan.md
 b694809c26d1375a55e23b9317caba2b8e67d5b63ff897db55dfeb46a59942aa  docs/release/release-plan.md
 80eb5aed87341c2f6721616843ee15d672b9ce52bbda45b0b1f26def86572e1d  extension/bridge.js
 582714ac6e9f965f317096e66b067ba3da2b0376afa0ac66eb9378ff36f4156e  extension/manifest.json
@@ -134,7 +134,7 @@ b4975fe6e95461c56a066be3a2153132ab250e9cbccdf085a56f191a19174d3a  src/ui/api.ts
 f5e104d44b9b0df79f04797a468736e86352883cec9d305ee1dfc46aa225acef  src/ui/balanceRead.ts
 c677d958b8c55105ea118e7e174e50f8c043e650d5ac1a632962602e63c9dd7f  src/ui/common.tsx
 7ee047092c0e62e89a8da3f4bf543db94a7600cff51350664174b2e91709e3f0  src/ui/copy-ux.ts
-eaf9b86289c0e797b656a65fc8ce7421dde4f9ae28ded258049ddb539bb3928f  src/ui/copy.ts
+274574897842fc97bfddd64db0ef333ed330122402dfe44417a9f5cd555b668b  src/ui/copy.ts
 a91a6c33a36da400e3df47fbc420e7c5dc0e3c3002bb4f655c274550d02ea81f  src/ui/format.ts
 b0134a7831e14df40678a4eeffca92b73386b03f7f3d1883a4f3445a00147e39  src/ui/gas/GasPanel.tsx
 6ad4416b768d4710710df777a1ee1e948b77b06fe8cbf03afb11835c8417810e  src/ui/gas/payer.ts
@@ -144,7 +144,7 @@ b0134a7831e14df40678a4eeffca92b73386b03f7f3d1883a4f3445a00147e39  src/ui/gas/Gas
 4390c6b01a09b009c684ac086307c52cb16f38fd4a49b4ae7e01d0a1305b5db3  src/ui/logbook.css
 6b310cfde2e074a332366724ebf33c3a70ec22365c54180020fb4da7f39a1586  src/ui/primitives.tsx
 f6c78910d2cbd5154af88b5230123a855b0b998ef66184e313b81583ccaf9af3  src/ui/report.ts
-e4757f29e78cc468fa87ab8963317bf3604cbefb8a8b70c290aca2ad48f929d2  src/ui/site/Site.tsx
+d02f528ac25783d75202a232165185f2877cb39187b163deefc3adf1ef4db7a4  src/ui/site/Site.tsx
 1b9a9025f8c44c025674c1a957d1586bef649f4dcba6c820394d95285bafd72e  src/ui/site/assets/demo-approve.webp
 b29d4381ebcc3d685a58ca8ef61f9959aeae2db15170466c4d5da0932a7cf7d4  src/ui/site/assets/demo-check.webp
 4a68aa9260d83f0c4161c1ea058cf20ded9edbe0f60067a416c3727f6d405a79  src/ui/site/assets/demo-deploy.webp
@@ -156,7 +156,7 @@ f85aa00a03204c127a0852c3dd30e8db19f9f5e6afb7a1ddba73631171e8bd54  src/ui/site/at
 5dd7d99520f44a741ae6e24ecf69062baed29d171bd5a2165b6cbb85120022c8  src/ui/site/atlas/Plate.tsx
 6f697258ab6dc2f28b91946f85f9febe08216161c0c8e9c95d3647c732f67931  src/ui/site/atlas/atlas.css
 a0580546f682ff2f177b1d368704ce2a2bbc50e8baa93ffcd400d5738c7be139  src/ui/site/atlas/geometry.ts
-d6a3ebfc4dd6b71b61f7186f023add3a71c5d664d805c9830022d2ff6e43f4c3  src/ui/site/copy-site.ts
+ce5277ddb6e89fe8e5da38677ff45c10babf725ef11a4dbb82179ce597daed4b  src/ui/site/copy-site.ts
 2bf6a523d387bb5cf1a5f6b93c20cffaa7525cf3e65e4040251e02cfc84dbd20  src/ui/site/notfound.css
 42b2d751004db27afafd004dd18671c157ce79468420b9f2d5012327692df3bf  src/ui/site/router.ts
 7e05eca548e7e85e16c53eba19ff0293110d40b31ec8c6617a5816c48d87e6c9  src/ui/site/routes.ts
@@ -191,7 +191,7 @@ c84652b3b756f2dc2b81d35128b372cf17443c51e2d58185c4387836dcd098a9  test/e2e/flow.
 2f5ead1b681f98e4b24c8faba1a9cb8963d4822165ab7abe91e12feef7ac12f9  test/e2e/helper-devtools.spec.ts
 28165749976e971b2749a83323d5a921ec180b530f34915bfe398a2ff4faaef0  test/e2e/rpc-settings.spec.ts
 b96bef911bc8222a457ac50812ef80550f79ed8fcb14b83de3cad15563f94185  test/e2e/runner-preview.spec.ts
-60fcb9a472e6a65dd2ed043654b9adfa83ea95aea71a4e7f287bc2a6fddea5b7  test/e2e/site.spec.ts
+116d7dbd97dff8f3c49c18d5639dc393f3573fa0a3796493808bb8570588142b  test/e2e/site.spec.ts
 70794355646804953ee9305a0af8d485999ec91502ed5e2d200ba1ee2751fc5b  test/e2e/ui.spec.ts
 c564fcfc7f4bdae20735581a8ef30296e59eede3906661a1ee46578ab6d2fed9  test/e2e/ux-behaviours.spec.ts
 a2258455f0f5dfec12e9b3bf872c3b7ac0fc16a0abeb372d2e49ae7b0242299c  test/e2e/ux-journeys.spec.ts
@@ -222,7 +222,7 @@ f092c1eb9d4c5c15c024099bfad8eaf704e1803d67b5fc1e96344a3a1ff73887  test/unit/conf
 380a32950e60dc88731cbaaca0f6850fb7d27c56b4e1030810012d09d4384606  test/unit/proof/verifyProof.test.ts
 2c91015a57078f893fce40f08c929417c3a45af5798a58e4cc812d39f04e171b  test/unit/release/budget-lib.test.ts
 6d5ef099663a3563a04e7b3d071ee98d20dad7c6a881760696f2c6ff8c1614d5  test/unit/release/export.test.ts
-f54673d8b14bfd0a0cd3f7eedef19fbdae5045a449a922861597d9a34384307c  test/unit/release/public-docs.test.ts
+610e424ff37cbfa632c0bc18535633a1319eb22f92e4cfdbfeba21d39994cdd6  test/unit/release/public-docs.test.ts
 4672d6f36ab06cf29e599e176247d0927eba9f571e5f1053038553d860b57063  test/unit/release/smoke-lib.test.ts
 2aa1ce9eed55ce7c24f10edf1d7c410c0583225273f9b2e5e7c09c7b79c0a399  test/unit/rpc/probe.test.ts
 442a8e8efe144deb33926b6657343a535fb01960564c315c9e13777dbf259d71  test/unit/rpc/registry.test.ts

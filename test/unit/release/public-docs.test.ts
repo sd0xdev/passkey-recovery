@@ -86,6 +86,8 @@ describe('public entry documents', () => {
 
   it('no page copy says the repository is unpublished, in either language', () => {
     const all = [...Object.values(SITE_EN), ...Object.values(SITE_ZH), ...Object.values(APP_EN), ...Object.values(APP_ZH)].join('\n');
+    // The same pages are what the website serves, so they never call the website undeployed.
+    expect(all).not.toMatch(/website is not deployed|Not deployed yet\.|網站也?尚未部署|尚未部署。請使用/);
     expect(all).not.toMatch(/repository (is|are) not public|once the repository is public|the folder you already have|repository 尚未公開|repository 公開之後|你已有的資料夾|downloaded package|存放下載套件|下載的套件/i);
   });
 });

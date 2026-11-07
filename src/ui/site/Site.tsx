@@ -380,7 +380,7 @@ function Download({ kind }: { kind: PageKind }) {
   return (
     <>
       <PageHead title="dl.title" lead={t('dl.lead')} />
-      {/* The source is public, the Release is not published and the website is not deployed: the way in is a clone. */}
+      {/* The source is public and the Release is not published: the way in is a clone. */}
       <Entry title={t('dl.status')} id="dl-status">
         <dl className="lb-defs lb-defs-inline">
           <dt>{t('dl.version')}</dt>

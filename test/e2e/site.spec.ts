@@ -203,15 +203,15 @@ test('Home: the hero leads to the tool and to the plates; the status ledger stat
   await expect(page.getByTestId('home-mainnet')).not.toContainText(/0x[0-9a-f]{8,}/i);
   await expect(page.getByTestId('home-status')).toContainText('Not audited');
   await expect(page.getByTestId('home-status')).toContainText('not affiliated with, endorsed by, or supported by');
-  // Three separate facts: the source is public, the runner Release is not published, the website is not deployed.
+  // Three separate facts: the source is public, the runner Release is not published, the website is static pages.
   await expect(page.getByTestId('home-source')).toContainText('Public on GitHub');
   await expect(page.getByTestId('home-source').locator('a')).toHaveAttribute('href', 'https://github.com/sd0xdev/passkey-recovery');
   await expect(page.getByTestId('home-release')).toContainText('Not published');
-  await expect(page.getByTestId('home-website')).toContainText('Not deployed yet');
+  await expect(page.getByTestId('home-website')).toContainText('Static pages');
   await page.getByTestId('lang-toggle').click();
   await expect(page.getByTestId('home-source')).toContainText('已公開在 GitHub');
   await expect(page.getByTestId('home-release')).toContainText('尚未發布');
-  await expect(page.getByTestId('home-website')).toContainText('尚未部署');
+  await expect(page.getByTestId('home-website')).toContainText('只有靜態頁面');
   await page.getByTestId('lang-toggle').click();
   await expect(page.getByTestId('home-faq').locator('details')).toHaveCount(6);
   await page.getByTestId('home-cta-tool').click();
@@ -228,14 +228,14 @@ test('tool help keeps the three publication facts apart and leads to the source 
   await page.goto(`${E2E_HOSTED}/recover`);
   await page.getByTestId('top-help').click();
   const help = page.getByTestId('help');
-  for (const text of ['public on GitHub', 'No runner Release or tarball is published yet', 'the website is not deployed']) await expect(help).toContainText(text);
+  for (const text of ['public on GitHub', 'No runner Release or tarball is published yet', 'start the runner']) await expect(help).toContainText(text);
   await expect(help.locator('a[href="/download"]')).toHaveCount(1);
   await expect(help.locator('a[href="https://github.com/sd0xdev/passkey-recovery"]')).toHaveCount(1);
   await expect(help.locator('a[href*="/releases"]')).toHaveCount(0);
   await page.getByTestId('sheet-help-close').click();
   await page.getByTestId('lang-toggle').click();
   await page.getByTestId('top-help').click();
-  for (const text of ['已公開在 GitHub', 'Runner Release 與 tarball 尚未發布', '網站也尚未部署']) await expect(help).toContainText(text);
+  for (const text of ['已公開在 GitHub', 'Runner Release 與 tarball 尚未發布', '啟動 runner']) await expect(help).toContainText(text);
 });
 
 test('Home rhythm (PM-03): hero → plates → is this for you → demo → who holds what, said once; the source link opens the public repository', async ({ page }) => {
@@ -344,13 +344,13 @@ test('the static 404 page is plain, bilingual and script-free', async ({ page })
   await axeClean(page, '404.html');
 });
 
-test('Download: the source is public, the Release unpublished, the website undeployed; a clone builds and runs, the package file is made locally, and the future Release address is text, not a link', async ({ page }) => {
+test('Download: the source is public, the Release unpublished, the website static pages; a clone builds and runs, the package file is made locally, and the future Release address is text, not a link', async ({ page }) => {
   await page.goto(`${E2E_HOSTED}/download`);
   await expect(page.getByTestId('dl-version')).toHaveText(pkg.version);
   await expect(page.getByTestId('dl-file')).toHaveText(TARBALL);
   await expect(page.getByTestId('dl-source-status')).toContainText('Public on GitHub');
   await expect(page.getByTestId('dl-release-status')).toContainText('Not published');
-  await expect(page.getByTestId('dl-website-status')).toContainText('Not deployed yet');
+  await expect(page.getByTestId('dl-website-status')).toContainText('Static pages');
   // The steps run in this order on a first visit: clone, then Node and npm (.nvmrc is in the clone), build, runner.
   const order = ['dl-clone', 'dl-node', 'dl-source-cmd', 'dl-runner', 'dl-pack-cmd', 'dl-sha', 'dl-run'];
   const tops = await page.evaluate((ids) => ids.map((id) => document.querySelector(`[data-testid="${id}"]`)!.getBoundingClientRect().top), order);
