@@ -42,7 +42,7 @@ You need Git, Node.js **24.22.1** and npm **11.19.1**. Full steps: [docs/INSTALL
 |-|--------|
 | Source code | The source code is public: [github.com/sd0xdev/passkey-recovery](https://github.com/sd0xdev/passkey-recovery) |
 | Runner package | Not published: there is no GitHub Release or tarball to download yet, and it is not on the npm registry |
-| Website | The website is live: [passkey-recovery.welfree-studio.workers.dev](https://passkey-recovery.welfree-studio.workers.dev). It serves static pages only; to use the tool, build and start the runner on your computer |
+| Website | The website is live: [passkey-recovery.sd0x.dev](https://passkey-recovery.sd0x.dev). It serves static pages only; to use the tool, build and start the runner on your computer |
 
 So the way in is a clone of the source:
 

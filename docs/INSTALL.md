@@ -12,7 +12,7 @@ Passkey Recovery runs in two places that share the same interface:
 | Gas wallet: browser wallet, File (browser) | Yes | Yes |
 | Gas wallet: File (native), 1Password, existing gas wallet | Only while paired with your local runner (the key stays in its signer) | Yes |
 
-What exists today: the source code is public on [GitHub](https://github.com/sd0xdev/passkey-recovery); there is no GitHub Release or tarball to download yet; the website is live at [passkey-recovery.welfree-studio.workers.dev](https://passkey-recovery.welfree-studio.workers.dev) and serves static pages only. Either way the tool needs the local runner, built from a clone (§2a).
+What exists today: the source code is public on [GitHub](https://github.com/sd0xdev/passkey-recovery); there is no GitHub Release or tarball to download yet; the website is live at [passkey-recovery.sd0x.dev](https://passkey-recovery.sd0x.dev) and serves static pages only. Either way the tool needs the local runner, built from a clone (§2a).
 
 ## 1. Requirements
 
@@ -87,7 +87,7 @@ While running: `p` prints a new pairing code, `u` ends all pairings, `q` or `Ctr
 
 ## 4. Pair the website with your runner
 
-1. Start the runner with the exact origin of the website. For the official website, from source: `npm run runner -- --allow-origin https://passkey-recovery.welfree-studio.workers.dev`. This version of the runner has no preconfigured allowed website origin, so the flag is required; a website you run yourself uses its own origin the same way. The Download page of the website shows the exact command.
+1. Start the runner with the exact origin of the website. For the official website, from source: `npm run runner -- --allow-origin https://passkey-recovery.sd0x.dev`. This version of the runner has no preconfigured allowed website origin, so the flag is required; a website you run yourself uses its own origin the same way. The Download page of the website shows the exact command.
 2. On the website, open **Recover**, press **Connect runner** and type the `XXXX-XXXX` code from your terminal.
 3. The pairing lives only in that tab. It ends after 30 minutes idle, on reload, or when the runner stops.
 

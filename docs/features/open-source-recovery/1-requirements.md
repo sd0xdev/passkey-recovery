@@ -114,7 +114,7 @@
 - [ ] 免 Console 的簽署路徑哪一條可行？（ADR-001 spikes S1–S4）
 - [x] 授權條款：Apache-2.0（2026-10-31，使用者決定；見 [`4-open-source-and-website.md`](./4-open-source-and-website.md) §1）。
 - [x] 支援範圍：首版只支援 Coinbase Smart Wallet v1.1 × Plasma mainnet（9745）（2026-10-31，使用者：「只需要先支持 plasma 就好了」）。其他鏈的相容性開發、測試與發布宣稱不在範圍內，不列為待辦或 release gate；匯入其他鏈上的原始部署證據只用來核對 Plasma 上的地址推導。
-- [ ] 官網網域（託管已決定：Cloudflare Workers Static Assets，先用 workers.dev）。
+- [ ] 官網網域（託管已決定：Cloudflare Workers Static Assets，先用 workers.dev）。**Update(2026-11-07)**：官網網域已決定並綁定：<https://passkey-recovery.sd0x.dev>。
 - [x] 本機 signer（FR-14）：維護，且三種 payer 皆必需（2026-11-01，使用者於 unified-product mission 決定）。Terminal signer 保留為 hand-off 路徑。
 
 ## 10. References

@@ -1,6 +1,6 @@
 # Open-source release & website spec（規劃）
 
-> **Doc class**: Lifecycle — Phase 4 appendix（current authority）。**現況（2026-11-07）：原始碼已公開（`github.com/sd0xdev/passkey-recovery`，CI 通過）；Runner Release 與 tarball 尚未發布；網站已上線（<https://passkey-recovery.welfree-studio.workers.dev>，2026-11-07 首次部署並通過 read-back）。** 授權、repo 與託管已於 2026-10-31 由使用者決定（§1）；M5（2026-11-02）已在本機完成發布所需的檔案、export、掃描、CI 設定與 runner 套件；tag、Release 與之後的部署仍是維護者步驟（[release plan](../../release/release-plan.md)、[deploy plan](../../release/deploy-plan.md)）。
+> **Doc class**: Lifecycle — Phase 4 appendix（current authority）。**現況（2026-11-07）：原始碼已公開（`github.com/sd0xdev/passkey-recovery`，CI 通過）；Runner Release 與 tarball 尚未發布；網站已上線（<https://passkey-recovery.sd0x.dev>，2026-11-07 首次部署並通過 read-back，`workers.dev` 位址保留）。** 授權、repo 與託管已於 2026-10-31 由使用者決定（§1）；M5（2026-11-02）已在本機完成發布所需的檔案、export、掃描、CI 設定與 runner 套件；tag、Release 與之後的部署仍是維護者步驟（[release plan](../../release/release-plan.md)、[deploy plan](../../release/deploy-plan.md)）。
 > 上游：[2-tech-spec.md](./2-tech-spec.md) · 設計：[design-ui-ux-guidelines.md](./design-ui-ux-guidelines.md)
 
 ## 1. Release 現況（2026-11-02，M5 本機完成）
@@ -11,7 +11,7 @@
 | 依賴授權 | [`THIRD_PARTY_NOTICES.md`](../../../THIRD_PARTY_NOTICES.md)；`scripts/release/licenses.mjs --check` 檢查隨套件出貨的 npm 依賴（含 transitive）與允許清單，產生 `licenses/npm-shipped.txt` | — |
 | 合約 bytecode | 每份 bytecode 追到上游 commit 與 solc 設定；`scripts/release/rebuild-contracts.mjs` 從原始碼重建比對（[SOURCE.md](../../../registry/coinbase-smart-wallet-v1.1/SOURCE.md)）；GPL／LGPL 原始碼與授權文字隨附於 `licenses/` | — |
 | 字型 | Atkinson Hyperlegible Next／Mono（SIL OFL 1.1），授權文字在 `licenses/`，build 時一併輸出 | — |
-| Repo 與官網 | `github.com/sd0xdev/passkey-recovery`；`wrangler.jsonc`（Workers Static Assets、workers.dev、wrangler 釘選）；dry-run 不上傳 | 2026-11-07 已部署並 read-back（repo 已建立，Private Vulnerability Reporting 已開啟） |
+| Repo 與官網 | `github.com/sd0xdev/passkey-recovery`；`wrangler.jsonc`（Workers Static Assets、custom domain `passkey-recovery.sd0x.dev`、保留 workers.dev、wrangler 釘選）；dry-run 不上傳 | 2026-11-07 已部署並 read-back（repo 已建立，Private Vulnerability Reporting 已開啟） |
 | Git | 公開 repo 的歷史只由 export 的檔案集合組成，不含開發 repo 的歷史 | 每次更新重新 export＋掃描，再以一般 push 更新 |
 | 個人資料 | §2：export＋掃描 0 命中 | 每次 release 重跑 |
 

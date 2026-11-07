@@ -42,7 +42,7 @@ Passkey 只能替它所屬的網站簽署，所以簽署發生在 Coinbase 自�
 |-|------|
 | 原始碼 | 原始碼已公開：[github.com/sd0xdev/passkey-recovery](https://github.com/sd0xdev/passkey-recovery) |
 | Runner 套件 | 尚未發布：目前沒有可下載的 GitHub Release 或 tarball，也沒有上 npm registry |
-| 網站 | 網站已上線：[passkey-recovery.welfree-studio.workers.dev](https://passkey-recovery.welfree-studio.workers.dev)。它只提供靜態頁面；要使用工具，請在你的電腦上建置並啟動 runner |
+| 網站 | 網站已上線：[passkey-recovery.sd0x.dev](https://passkey-recovery.sd0x.dev)。它只提供靜態頁面；要使用工具，請在你的電腦上建置並啟動 runner |
 
 所以請從 clone 原始碼開始：
 

@@ -11,7 +11,7 @@
 | 形態 | 如何取得 | UI origin | API | 模擬 | 送出 |
 |------|---------|-----------|-----|------|------|
 | Local（fallback，建議） | clone 公開 repo 後 `npm run runner`（`dist-server/runner.mjs`），或 `npm exec --yes --package ./passkey-recovery-<version>.tgz -- passkey-recovery`（目前是自己 `npm pack` 做出的 tgz；Release 尚未發布，也沒上 npm registry） | `http://127.0.0.1:4171` | 同 origin；頁面 meta 內的 session token（`x-cbpr-session`） | runner 內的釘選 Anvil fork | 三種 gas 錢包皆可 |
-| Hosted | `npm run build:hosted` → `dist-hosted/`（靜態＋`_headers`）；**已部署**（<https://passkey-recovery.welfree-studio.workers.dev>） | 官方 https 網站 | 沒有自己的 API；使用者配對本機 runner 後經 `http://127.0.0.1:<port>`（`x-cbpr-pair`） | 只在配對後、由本機 runner 執行；**沒有雲端模擬** | 瀏覽器錢包與瀏覽器 File；native 模式需要 runner 的 signer |
+| Hosted | `npm run build:hosted` → `dist-hosted/`（靜態＋`_headers`）；**已部署**（<https://passkey-recovery.sd0x.dev>） | 官方 https 網站 | 沒有自己的 API；使用者配對本機 runner 後經 `http://127.0.0.1:<port>`（`x-cbpr-pair`） | 只在配對後、由本機 runner 執行；**沒有雲端模擬** | 瀏覽器錢包與瀏覽器 File；native 模式需要 runner 的 signer |
 | 舊 sidecar | `npm start`（4173） | `http://127.0.0.1:4173` | 同 origin | 使用者 `PATH` 上的 anvil | 瀏覽器錢包、瀏覽器 File、Terminal signer hand-off |
 
 ```

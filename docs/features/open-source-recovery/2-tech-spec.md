@@ -218,6 +218,8 @@ tracker 讀 EntryPoint nonce 與 gas wallet tx nonce 需要完整地址：輪詢
 | 官網 | Cloudflare Workers Static Assets、先用 workers.dev；正式網域未定 |
 | 發布方式 | 明確 allowlist，永不 `git add .`；公開去個人化的 registry，public code／tests 不依賴私有研究資料 |
 
+> **Update(2026-11-07)**：正式網域已決定並綁定：<https://passkey-recovery.sd0x.dev>；`workers.dev` 位址保留。
+
 ## 4. Risks and Dependencies
 
 | 風險 | 影響 | 緩解 |

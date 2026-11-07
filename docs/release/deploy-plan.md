@@ -1,8 +1,10 @@
 # Website deploy plan
 
-The website is the static build `dist-hosted/` served by **Cloudflare Workers Static Assets** on a `workers.dev` subdomain. This project adds no Worker script, binding, analytics or log collection. Configuration: [`wrangler.jsonc`](../../wrangler.jsonc); Wrangler is pinned as an exact devDependency.
+The website is the static build `dist-hosted/` served by **Cloudflare Workers Static Assets** on the custom domain `passkey-recovery.sd0x.dev`. The `workers.dev` address stays on and serves the same files. This project adds no Worker script, binding, analytics or log collection. Configuration: [`wrangler.jsonc`](../../wrangler.jsonc); Wrangler is pinned as an exact devDependency.
 
-**Status: deployed at <https://passkey-recovery.welfree-studio.workers.dev>.** First deployed 2026-11-07 from public commit `3a43d6d`, version `02179f54-974f-46b5-b31a-26399debd941`; the read-back below passed. Later commits that change no served file do not need a new deploy. Nothing in CI deploys; the steps below are run by the maintainer.
+**Status: deployed at <https://passkey-recovery.sd0x.dev>.** First deployed 2026-11-07 from public commit `3a43d6d`, version `02179f54-974f-46b5-b31a-26399debd941`, first at <https://passkey-recovery.welfree-studio.workers.dev>; the custom domain was then bound to that same version, and the read-back below passed on both addresses. Later commits that change no served file do not need a new deploy. Nothing in CI deploys; the steps below are run by the maintainer.
+
+A runner allows one exact origin per `--allow-origin`, so a page on one address cannot pair with a runner started for the other. The Download page shows the command for the address it was opened on; the official one is the custom domain.
 
 The read-back covers this site, not a recovery: the pairing check used a disposable runner and a synthetic address, with nothing signed or sent. Cloudflare adds its own response headers to the live site, including `Report-To` and `NEL` (browser network error reports to Cloudflare). They do not come from `dist-hosted/_headers`, and the pages do not load anything for them.
 
@@ -28,8 +30,8 @@ The deploy waits until this run passes with the `workerd` origin included; keep 
 ## Deploy (maintainer)
 
 1. Log in with the maintainer's own Cloudflare account in a terminal (`npx wrangler login`, which is the `default` auth profile, or a named auth profile you already have); do not use a shared or global token. Note the id of the account to deploy to. This step deploys nothing.
-2. Deploy once from the release tree: a clean checkout of the public commit whose CI passed, the same `dist-hosted/` the route matrix above ran against. Always name both the account and the auth profile (`default` for a plain `wrangler login`), because without `--profile` Wrangler may use a profile bound to the directory: `CLOUDFLARE_ACCOUNT_ID=<account id> npx wrangler deploy --profile <auth profile>`. Wrangler prints the `https://passkey-recovery.<subdomain>.workers.dev` URL.
-3. Do not enable preview URLs, observability or custom routes; they are off in `wrangler.jsonc` on purpose.
+2. Deploy once from the release tree: a clean checkout of the public commit whose CI passed, the same `dist-hosted/` the route matrix above ran against. Always name both the account and the auth profile (`default` for a plain `wrangler login`), because without `--profile` Wrangler may use a profile bound to the directory: `CLOUDFLARE_ACCOUNT_ID=<account id> npx wrangler deploy --profile <auth profile>`. Wrangler prints the addresses it deployed to. `wrangler.jsonc` lists the custom domain, but no deploy has run with that entry yet: the auth profile must be allowed to manage the domain on its zone, so check that the first such deploy keeps it.
+3. Do not enable preview URLs or observability, and do not add routes beyond the custom domain; `wrangler.jsonc` sets this on purpose.
 
 ## Runtime read-back
 
@@ -48,7 +50,7 @@ The deploy counts as done only after these checks pass against the live URL:
 ## After the read-back
 
 1. Update the status in the README, the install guides and this plan. The website's own pages describe it without a deployment claim, so this edit changes no served file; rebuild and compare to confirm.
-2. Later, with the next runner version: add the exact live origin to `OFFICIAL_ORIGINS` in `server/runner/runner.ts`, so the runner pairs with the official website without `--allow-origin`. That is a code change: review, test and ship it. Until then the Download page shows the `--allow-origin` command for this exact address.
+2. Later, with the next runner version: add the exact official origin to `OFFICIAL_ORIGINS` in `server/runner/runner.ts`, so the runner pairs with the official website without `--allow-origin`. That is a code change: review, test and ship it. Until then the Download page shows the `--allow-origin` command for this exact address.
 
 ## Rollback
 
