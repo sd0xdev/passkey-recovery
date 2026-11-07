@@ -4,7 +4,7 @@
 // three-step key → is this for you → the real tool on synthetic data, one still at a time → who holds what, once →
 // status / questions. Pages that say how to start speak to where they are (pageKind: runner / website / preview).
 import { useEffect, useState, type ReactNode } from 'react';
-import { RELEASE_PAGE_URL, RELEASE_TAG, TARBALL, VERSION, runnerCommand } from '../../config/release';
+import { CLONE_COMMANDS, RELEASE_PAGE_URL, RELEASE_TAG, REPO_URL, TARBALL, VERSION, runnerCommand, sourceRunnerCommand } from '../../config/release';
 import type { PageKind } from '../api';
 import { useT, type MsgKey } from '../i18n';
 import { CopyButton } from '../ux';
@@ -221,8 +221,18 @@ function Home() {
             <dd>{t('ledger.audit.d')}</dd>
           </div>
           <div>
-            <dt>{t('ledger.release')}</dt>
-            <dd data-testid="home-release">{t('ledger.release.d')}</dd>
+            <dt>{t('status.source')}</dt>
+            <dd data-testid="home-source">
+              {t('status.source.d')} <a href={REPO_URL}>{t('status.source.link')}</a>
+            </dd>
+          </div>
+          <div>
+            <dt>{t('status.release')}</dt>
+            <dd data-testid="home-release">{t('status.release.d')}</dd>
+          </div>
+          <div>
+            <dt>{t('status.website')}</dt>
+            <dd data-testid="home-website">{t('status.website.d')}</dd>
           </div>
           <div>
             <dt>{t('ledger.affiliation')}</dt>
@@ -262,8 +272,8 @@ function ModeNote({ kind }: { kind: PageKind }) {
     <div className="lb-mode-note" data-testid="mode-note" data-kind={kind}>
       <h3>{t(`mode.${k}.t` as MsgKey)}</h3>
       <p>{t(`mode.${k}.d` as MsgKey, { origin: location.origin })}</p>
-      {kind === 'website' && <Command text={runnerCommand(location.origin)} testId="mode-run-origin" />}
-      {kind === 'static-preview' && <Command text={runnerCommand()} testId="mode-run" />}
+      {kind === 'website' && <Command text={sourceRunnerCommand(location.origin)} testId="mode-run-origin" />}
+      {kind === 'static-preview' && <Command text={sourceRunnerCommand()} testId="mode-run" />}
     </div>
   );
 }
@@ -352,7 +362,9 @@ function Security() {
         <p>{t('sec.keys.body')}</p>
       </Entry>
       <Entry title={t('sec.report')} id="sec-report">
-        <p>{t('sec.report.body')}</p>
+        <p>
+          {t('sec.report.body')} <a href={`${REPO_URL}/security`}>{t('sec.report.link')}</a>
+        </p>
         <p className="lb-callout">{t('sec.report.never')}</p>
         <p data-testid="sec-policy">{t('sec.policy')}</p>
       </Entry>
@@ -368,7 +380,7 @@ function Download({ kind }: { kind: PageKind }) {
   return (
     <>
       <PageHead title="dl.title" lead={t('dl.lead')} />
-      {/* PM-05: the repository and the Release are not public yet, so neither is offered as the way in. */}
+      {/* The source is public, the Release is not published and the website is not deployed: the way in is a clone. */}
       <Entry title={t('dl.status')} id="dl-status">
         <dl className="lb-defs lb-defs-inline">
           <dt>{t('dl.version')}</dt>
@@ -379,27 +391,61 @@ function Download({ kind }: { kind: PageKind }) {
           <dd className="lb-mono" data-testid="dl-file">
             {TARBALL}
           </dd>
-          <dt>{t('dl.release')}</dt>
-          <dd data-testid="dl-release-status">{t('dl.release.d')}</dd>
+          <dt>{t('status.source')}</dt>
+          <dd data-testid="dl-source-status">
+            {t('status.source.d')} <a href={REPO_URL}>{t('status.source.link')}</a>
+          </dd>
+          <dt>{t('status.release')}</dt>
+          <dd data-testid="dl-release-status">{t('status.release.d')}</dd>
+          <dt>{t('status.website')}</dt>
+          <dd data-testid="dl-website-status">{t('status.website.d')}</dd>
         </dl>
         <p>{t('dl.status.body')}</p>
       </Entry>
       <Entry title={t('dl.local')} id="dl-local">
         <ModeNote kind={kind} />
         <ol className="lb-numbered">
-          <li>{t('dl.step1')}</li>
+          <li>
+            {t('dl.clone')}
+            <Command text={CLONE_COMMANDS} testId="dl-clone" />
+          </li>
+          <li>
+            {t('dl.step1')}
+            <Command text={['nvm install 24.22.1', 'npm -v'].join('\n')} testId="dl-node" />
+            <p>{t('dl.npmOlder')}</p>
+          </li>
           <li>
             {t('dl.local.build')}
-            <Command text={['npm ci', 'npm run build', 'npm pack'].join('\n')} testId="dl-source-cmd" />
+            <Command text={['npm ci', 'npm run build'].join('\n')} testId="dl-source-cmd" />
+          </li>
+          <li>
+            {t('dl.step4')}
+            <Command text={sourceRunnerCommand()} testId="dl-runner" />
+            {/* Only an https website can be allowed (the runner refuses other origins), so only the real site shows it. */}
+            {kind === 'website' && (
+              <>
+                <p>{t('dl.allow')}</p>
+                <Command text={sourceRunnerCommand(location.origin)} testId="dl-runner-origin" />
+              </>
+            )}
+          </li>
+          <li>{t(kind === 'website' ? 'dl.step5.website' : 'dl.step5')}</li>
+        </ol>
+      </Entry>
+      <Entry title={t('dl.pack')} id="dl-pack">
+        <p>{t('dl.pack.body')}</p>
+        <ol className="lb-numbered">
+          <li>
+            {t('dl.pack.make')}
+            <Command text="npm pack" testId="dl-pack-cmd" />
           </li>
           <li>
             {t('dl.local.sha', { file: TARBALL })}
             <Command text={`shasum -a 256 ${TARBALL}`} testId="dl-sha" />
           </li>
           <li>
-            {t('dl.step4')}
+            {t('dl.pack.run')}
             <Command text={runnerCommand()} testId="dl-run" />
-            {/* Only an https website can be allowed (the runner refuses other origins), so only the real site shows it. */}
             {kind === 'website' && (
               <>
                 <p>{t('dl.allow')}</p>
@@ -407,7 +453,6 @@ function Download({ kind }: { kind: PageKind }) {
               </>
             )}
           </li>
-          <li>{t(kind === 'website' ? 'dl.step5.website' : 'dl.step5')}</li>
         </ol>
       </Entry>
       <Entry title={t('dl.future')} id="dl-future">

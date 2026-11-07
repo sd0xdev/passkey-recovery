@@ -6,7 +6,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { SUPPORTED } from '../config/registry';
 import { api, ApiError, hasConnection, lastDrop, onConnectionChange, pageKind, pairedRunner, retryRunner, runnerLost, setSignerBase, sidecarMode, sidecarSession, versionDiffers, type PageKind } from './api';
-import { VERSION } from '../config/release';
+import { REPO_URL, VERSION } from '../config/release';
+import { PATH } from './site/routes';
 import { downloadJson } from './common';
 import { shortAddress } from './format';
 import { useT, type MsgKey } from './i18n';
@@ -729,6 +730,7 @@ function HelpBody() {
     ['help.steps', 'help.stepsBody'],
     ['help.unknown', 'help.unknownBody'],
     ['help.ai', 'help.aiBody'],
+    ['help.status', 'help.statusBody'],
   ];
   return (
     <div data-testid="help">
@@ -739,7 +741,10 @@ function HelpBody() {
         </section>
       ))}
       <p>
-        {t('help.runbook')}
+        <a href={PATH.download}>{t('help.steps.link')}</a>
+      </p>
+      <p>
+        {t('help.runbook')} <a href={REPO_URL}>{t('help.repo')}</a>
       </p>
     </div>
   );

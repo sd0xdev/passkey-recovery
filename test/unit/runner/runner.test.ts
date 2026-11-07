@@ -98,7 +98,7 @@ describe('HELP (NX-04: where and how to run it)', () => {
   it('regression: shows only start commands that work today (tarball npm exec, source npm run runner), never a registry npx entry', () => {
     expect(HELP).toContain('npm exec --yes --package ./passkey-recovery-<version>.tgz -- passkey-recovery');
     expect(HELP).toContain('npm run runner -- [options]');
-    expect(HELP).toContain('not on the npm registry yet');
+    expect(HELP).toContain('no published Release or npm registry package yet');
     expect(HELP).not.toMatch(/\bnpx\b/);
     expect(HELP).toContain('this computer only');
   });

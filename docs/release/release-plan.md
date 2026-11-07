@@ -2,6 +2,8 @@
 
 How a version of Passkey Recovery becomes public. Every step below that publishes something is a **maintainer action**; nothing in this repository's scripts publishes, tags, uploads or deploys on its own.
 
+**Current state:** the source repository is public and its CI runs (steps 1–2 below). No tag, GitHub Release or tarball exists, and the website is not deployed (steps 3–5 have not run).
+
 ## What a release contains
 
 | Artifact | Built by | Where it goes |

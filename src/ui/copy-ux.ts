@@ -63,7 +63,8 @@ export const UX_EN = {
   'ladder.failed': 'Did not go through',
   'ladder.unknown': 'Not known yet',
 
-  'pair.step1': 'In a Terminal on this computer, in the folder holding the downloaded package, run:',
+  'pair.step1': 'In a Terminal on this computer, in your built clone of the source, run the command below. No clone yet?',
+  'pair.step1.link': 'Clone and build it first',
   'pair.step2': 'Wait until it prints “Pairing code”.',
   'pair.step3': 'Type the code here and press Connect.',
   'pair.copy': 'Copy command',
@@ -165,7 +166,8 @@ export const UX_ZH: Record<UxKey, string> = {
   'ladder.failed': '沒有完成',
   'ladder.unknown': '尚不確定',
 
-  'pair.step1': '在這台電腦的 Terminal、存放下載套件的資料夾中執行：',
+  'pair.step1': '在這台電腦的 Terminal、你已建置的原始碼 clone 資料夾中執行下面的指令。還沒有 clone？',
+  'pair.step1.link': '先 clone 並建置',
   'pair.step2': '等它印出「Pairing code」。',
   'pair.step3': '在這裡輸入代碼並按「連接」。',
   'pair.copy': '複製指令',

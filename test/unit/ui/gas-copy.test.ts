@@ -112,8 +112,8 @@ describe('roles and where things run (GAS-01, NX-04)', () => {
   });
   it('the pairing sheet says what the runner needs: Node 24 + npm, no extension, no global install, first-run download, local simulation', () => {
     const [en, zh] = both('pair.prereq');
-    for (const re of [/Node\.js 24/, /npm/, /no browser extension/, /nothing installed globally/, /first run downloads/, /simulation/, /this computer/]) expect(en).toMatch(re);
-    for (const re of [/Node\.js 24/, /npm/, /不需要瀏覽器擴充功能/, /不做全域安裝/, /第一次執行會/, /模擬/, /這台電腦/]) expect(zh).toMatch(re);
+    for (const re of [/Node\.js 24/, /npm/, /Git/, /no browser extension/, /Building from source/, /simulation/, /this computer/]) expect(en).toMatch(re);
+    for (const re of [/Node\.js 24/, /npm/, /Git/, /不需要瀏覽器擴充功能/, /從原始碼建置/, /模擬/, /這台電腦/]) expect(zh).toMatch(re);
     expect(`${en}${zh}`).not.toMatch(/\bnpx\b/);
     expect(`${MESSAGES.en['gas.err.no-runner']}${MESSAGES['zh-Hant-TW']['gas.err.no-runner']}`).not.toMatch(/\bnpx\b/);
   });

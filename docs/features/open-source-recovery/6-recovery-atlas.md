@@ -65,7 +65,7 @@ PM 修訂（§10.3）後的順序：先講機制，再問「適合你嗎」，�
 | 3 適合你嗎 | 適用／不適用兩欄（不變） | ✓／✕ ledger |
 | 4 走進產品 | 「Check → Deploy if needed → Approve → Track」四張真實 UI 局部截圖，synthetic 資料，**一次一張**：四個具名按鈕（`aria-pressed`）＋上一個／下一個＋「第 n 個，共 4 個」；每張都標「Demo, synthetic data／示範（合成資料）」 | 一張紙，跟圖板同一套框線；沒看到的那幾張是 `hidden`，lazy 圖片不會先載入 |
 | 5 誰握有什麼（只一次） | 轄區圖四區；「這個頁面」區寫明它不持有要救援錢包的私鑰、gas 私鑰只在你於頁面建立或開啟 keystore 時存在分頁記憶體；Passkey 區寫明由 Passkey 提供者保存、可能同步、只能為 keys.coinbase.com 簽章。「它們之間僅有的通道」收在 `<details>`；完整說明連到 how-it-works | 深色夜間版圖板（全頁唯一一段深底） |
-| 6 狀態、FAQ、開始 | 狀態 ledger（新增「發布：尚未發布；請在你的資料夾建置」）、FAQ、再一次主 CTA | 回到 fog 底 |
+| 6 狀態、FAQ、開始 | 狀態 ledger（分開寫三件事：原始碼已公開、Runner Release 尚未發布、網站尚未部署）、FAQ、再一次主 CTA | 回到 fog 底 |
 
 截圖產生：`scripts/design/capture-demo.mjs` 以 e2e 的 synthetic testchain 與 synthetic wallet（`test/support/e2e-servers.ts`）跑真實 UI，裁成 WebP 放 `src/ui/site/assets/`；不含真人地址、1Password private link、配對碼或既有收據。
 
@@ -126,7 +126,7 @@ PM 修訂（§10.3）後的順序：先講機制，再問「適合你嗎」，�
 |---|---|---|---|
 | Runner 自己的頁面 | 有 `cbpr-session` meta | 已連接（「就是提供本頁的那一個（版本 v…），不需要配對」） | 直接用；重新整理仍連接（每次載入拿新 session） |
 | Runner 頁面，但 runner 停了／重啟了 | `runnerLost()` = `offline`／`stale` | 「Runner stopped」／「Runner restarted」 | 重新啟動 runner／重新整理 |
-| HTTPS 官網，未配對 | 無 meta、`https:` | 三步：下載、帶 `--allow-origin <本站>` 啟動、輸入配對碼 | 使用者明確操作；不掃描 localhost |
+| HTTPS 官網，未配對 | 無 meta、`https:` | 三步：clone 並建置、帶 `--allow-origin <本站>` 啟動、輸入配對碼 | 使用者明確操作；不掃描 localhost |
 | HTTPS 官網，已配對 | 有配對 | 已連接（配對的 runner，版本 v…） | runner 版本 ≠ 頁面版本時顯示「版本不同」提醒；protocol 不同仍拒絕配對 |
 | 本機 HTTP 靜態預覽（Vite／`wrangler dev`／http 上的 hosted build） | 無 meta、非 `https:` | 「Static preview without a runner. It cannot pair: the runner accepts https websites only.」 | 指向 `http://127.0.0.1:4171/recover`（完整本機預覽）。**不顯示** `--allow-origin http://…` 這種必然被拒的指令 |
 
@@ -134,8 +134,8 @@ PM 修訂（§10.3）後的順序：先講機制，再問「適合你嗎」，�
 
 ### 6.3 官網啟動指令（與 distribution 契約一致）
 
-- 套件還沒發布到 npm registry，repository 與 GitHub Release 也都還沒公開。Download 頁（§10.5）先寫發布狀態「尚未發布」，主要路徑是在使用者已有的資料夾 `npm ci`、`npm run build`、`npm pack`；規劃中的 Release 網址只以文字列在「發布之後（規劃中）」，不是連結。
-- 指令都在 tgz 所在的資料夾執行：`npm exec --yes --package ./passkey-recovery-<version>.tgz -- passkey-recovery`（預設 4171）；官網只在 `https:` 頁面顯示加上 `--allow-origin <本站 origin>` 的版本。
+- 原始碼 repository 已公開；套件還沒發布到 npm registry，也沒有 GitHub Release 或 tarball；網站尚未部署。Download 頁（§10.5）分開寫這三件事，主要路徑是 `git clone`、Node／npm、`npm ci`、`npm run build`、`npm run runner`；`npm pack` 是同一份 clone 的本機替代路徑；規劃中的 Release 網址只以文字列在「發布之後（規劃中）」，不是連結。
+- source 路徑在 clone 的資料夾執行 `npm run runner`；套件路徑在 tgz 所在的資料夾執行 `npm exec --yes --package ./passkey-recovery-<version>.tgz -- passkey-recovery`（預設都是 4171）；官網只在 `https:` 頁面顯示加上 `--allow-origin <本站 origin>` 的版本。
 - `scripts/release/pack-smoke.mjs` 在乾淨暫存資料夾驗證：`--version`、`--help` 的 port、`/` 與 `/recover` 帶 session、帶 https `--allow-origin` 時以印出的配對碼（只在記憶體）配對成功、token 可用於 `/api/config`、沒 token 401、重用配對碼 410、非 allowlist origin 被拒、HTTP origin 被拒、port 被佔用時提示、Ctrl-C 後沒有殘留程序。
 - `scripts/release/preview-smoke.mjs` 照使用者的方式跑 `npm run preview`（移除所有 `CBPR_*`）：4171／4172 被佔用就拒跑；記錄 4171 的 listener PID、served entry asset 與 sha256、API 版本；`/`、`/recover` 帶 session；Chromium 在 `/recover` 已連接、顯示本版版號，重新整理、上一頁、下一頁後仍連接；最後停掉 process group 並確認兩個 port 都關閉（`scripts/release/smoke-lib.mjs` 的 `stopAll`：每個等待都有上限，wrapper 先結束但子程序仍佔 port 時補 SIGKILL）。
 
@@ -182,7 +182,7 @@ PM 修訂（§10.3）後的順序：先講機制，再問「適合你嗎」，�
 
 ## 10. PM 修訂（2026-11-02 第二輪）
 
-PM 驗收第一輪後的五項修訂（要求與範圍見 [`requests/2026-11-02-pm-revision.md`](./requests/2026-11-02-pm-revision.md)）。方向不變；這一節記錄每項的設計決定。
+PM 驗收第一輪後的五項修訂：誠實的狀態字（PM-01）、390 px 的 gas sheet（PM-02）、首頁節奏（PM-03）、模式一致（PM-04）、發布狀態與 Download（PM-05）。原始 request 是維護者的私人紀錄，不公開；本節各小節自成完整說明，閱讀時不需要它。方向不變；這一節記錄每項的設計決定。
 
 ### 10.1 PM-01 誠實的狀態字
 
@@ -229,16 +229,17 @@ Download 的 `--allow-origin` 指令也只在 `website` 出現。
 
 | 區塊 | 內容 |
 |---|---|
-| 發布狀態 | 版本、檔名、「尚未發布。repository 與 GitHub Release 都還沒有公開。」 |
-| 在你的資料夾建置並執行（`#dl-local`） | 模式說明；Node／npm 版本；`npm ci`、`npm run build`、`npm pack`；記下 tgz 的 SHA-256；`npm exec --yes --package ./<tgz> -- passkey-recovery`；https 網站另列帶 `--allow-origin` 的指令；開啟印出的網址 |
+| 目前有什麼 | 版本、套件檔名；原始碼（已公開在 GitHub，連到 repository）；Runner Release（尚未發布：沒有 GitHub Release，也沒有 tarball）；網站（尚未部署） |
+| 從原始碼執行（`#dl-local`） | 模式說明；`git clone`、`cd`；Node／npm 版本；`npm ci`、`npm run build`；`npm run runner`；https 網站另列帶 `--allow-origin` 的指令；開啟印出的網址 |
+| 或打包成一個套件檔執行（`#dl-pack`） | `npm pack`；記下 tgz 的 SHA-256；`npm exec --yes --package ./<tgz> -- passkey-recovery`；https 網站另列帶 `--allow-origin` 的指令。明寫這個檔案是使用者自己做的，不是已發布的 Release |
 | 發布之後（規劃中） | 規劃的 Release 網址以文字列出，不是連結 |
-| 重建合約、授權 | 不變；LICENSE 與 THIRD_PARTY_NOTICES.md 寫「在原始碼資料夾」 |
+| 重建合約、授權 | 不變；LICENSE 與 THIRD_PARTY_NOTICES.md 寫「在原始碼 repository」 |
 
-其他入口一起改：footer「Source code」連到 `/download#dl-local`；Security 的 SECURITY.md、how-it-works 的 notices、工具說明的 runbook 都改成「原始碼資料夾裡的檔案」，不連到尚未公開的 repo。作者與 sd0x-harness 的 GitHub 連結不變（它們是公開的）。
+其他入口一起改：footer「Source code」與工具說明連到公開 repository；Security 連到它的安全性頁面；SECURITY.md、how-it-works 的 notices 寫「原始碼 repository 裡的檔案」。模式說明的指令用 source 路徑（`npm run runner`），因為第一次來的人還沒有 tgz。沒有任何連結指向 Release 或 tarball。
 
 ### 10.7 PM 追加：轉帳之後（PM-06～PM-09）
 
-同一輪 PM 追加的四項，來自真人操作時看到的問題（要求見 [`requests/2026-11-02-pm-revision.md`](./requests/2026-11-02-pm-revision.md) §1）。狀態：**已實作**（2026-11-02，測試見 §10.6）；純判斷在 `src/ui/balanceRead.ts`、`src/ui/stepWords.ts`，畫面在 `Tool.tsx`／`MoveStep.tsx`／`TrackStep.tsx`，複製狀態是 `ux.tsx` 的 `useCopy`。不代表 PM 驗收。
+同一輪 PM 追加的四項，來自真人操作時看到的問題；要求就寫在下面 PM-06～PM-09 各段（原始 request 是私人紀錄，不公開）。狀態：**已實作**（2026-11-02，測試見 §10.6）；純判斷在 `src/ui/balanceRead.ts`、`src/ui/stepWords.ts`，畫面在 `Tool.tsx`／`MoveStep.tsx`／`TrackStep.tsx`，複製狀態是 `ux.tsx` 的 `useCopy`。不代表 PM 驗收。
 
 **PM-06 餘額刷新**。Move 的可用餘額取自 Check 的 diagnosis；轉帳成功後與新轉帳開始時都要重新讀，且舊的讀數不能當成目前餘額。
 
@@ -287,7 +288,7 @@ Download 的 `--allow-origin` 指令也只在 `website` 出現。
 | PM-02a／b | 自動：`gas-runtime-ux.spec.ts` 的 390×844 測試（標題與下一個欄位在畫面內、Change 聚焦、方向鍵切換、五種方式、窄版收合／寬版展開、320 reflow）與 1440／768／390 版面測試；實跑：390×844 EN／繁中量測與截圖 |
 | PM-03a～d | 自動：`test/e2e/site.spec.ts`（首頁順序、通道收合、footer 連結、Demo 逐張且未看的不載入）、`test/e2e/atlas.spec.ts`（主圖與三圖板座標、播放、reduced motion、Demo 四張逐一載入）、`test/integration/deploy.test.ts`（`needsEvidence`）、`flow.spec.ts`（補上建立資料聚焦輸入）、`test/unit/ui/atlas-assets.test.ts`（重拍後的 SHA-256）、`test/unit/ui/site-copy.test.ts`（轄區圖的私鑰與 Passkey 說法）；實跑：`budget-home.mjs`／`perf-home.mjs`；檢視：新舊截圖 |
 | PM-04 | 自動：`site.spec.ts` 模式說明測試（runner 4177、https 4179、http 4180 × 三個內頁）、Download 的 `--allow-origin` 只在 https |
-| PM-05 | 自動：`site.spec.ts` Download 測試（尚未發布、建置指令、無 git clone、未來網址是文字、主體不連 repo）；實跑：`pack-smoke.mjs`、`preview-smoke.mjs` |
+| PM-05 | 自動：`site.spec.ts` Download 與首頁測試（三件事分開、clone→工具→build→runner→pack 的順序、唯一的 repo 連結是原始碼本身、沒有 Release／tgz 連結、未來網址是文字）、`test/unit/release/public-docs.test.ts`（公開樹相對連結、四份入口文件的步驟與三件事）；實跑：`pack-smoke.mjs`、`preview-smoke.mjs` |
 | PM-06 | 自動：`test/e2e/flow.spec.ts`「PM-06/07/08」（成功後自動重新讀取；「再來一筆」時讀取中不可 Review、輸入保留；新的餘額比第一筆前少 1.5 USDT0 且區塊較新；超額不可 Review；讀取失敗顯示原因與舊區塊、「再試一次」；較早的回應晚到不覆蓋）、`test/e2e/gas-payers.spec.ts`（整個 runner 停止回應時「重新讀取餘額」立即顯示失敗與原因、Review 不可按、輸入保留；runner 回來後再讀一次即為新鮮）、`test/unit/ui/balanceRead.test.ts`（哪些結果觸發讀取、哪個回應套用、超額判斷） |
 | PM-07 | 自動：`flow.spec.ts`（成功→「再來一筆」EN／繁中；已簽未送出的「清除重來」：捨棄、不送出、說明簽章不會在鏈上撤銷；結果不明→「清除重來」與說明；清除後不重新整理即可繼續；runner 回 503 時「清除重來」與「捨棄」都保留 plan、顯示未捨棄、請求在外時 Send／清除／捨棄／交接不可按；404 時照常清除、沒有錯誤；send-request 的回應遺失後按「捨棄」→ runner 回 `unknown` → 顯示結果不明、Track 有這一筆的紀錄且標成「這一筆」、重新整理後仍在、錢包未被要求；「清除重來」讀 runner 的 `unknown`：已追蹤、不開新表單、拒存時說明；先前一筆追蹤讀不到時已簽 plan 等待而非作廢、確認視窗的 Send 一併停用；等待中放棄的 Send 與整個 runner 停止回應時放棄的 Send 都保留 plan、runner 回來後聽到「沒送出」；該回報的回應遺失 → 核對恢復後再告知、runner 回同一個已簽 plan、Send 繼續；回報未答時按「捨棄」只等那一個答案；交接碼建立中遇到等待 → 不顯示碼並捨棄、捨棄失敗時保留）、`gas-payers.spec.ts`（picked-keystore 付款方：整個 runner 停止回應時已簽 plan 與付款方保留、再回答後繼續；原生 1Password 付款方：等待中放棄的 Send，runner 在先前一筆確定改變後才回答 → plan 作廢、遲到答案不帶回；runner 沒聽到 → 保持已簽等待，恢復後再告知、Send 經簽章器到收據且只 relay 一次）、`test/unit/server/transfer-relay.test.ts`（「沒送出」說兩次 → 同一個已簽 plan、仍可發 send-request；已送出／已捨棄 → 409）、390 px 版面 |
 | PM r30 追加（hash 線索） | 自動：`test/unit/server/track-bundle.test.ts`（都在「RPC 拒絕事件搜尋」的情境下：有 hash → 由收據核對；沒有 hash → 結果不明並要求貼 hash；有 hash 但交易不含這個 UserOp／UserOp 與記錄的意圖不同 → 因搜尋被拒而結果不明、無收據、說明哪裡不符）、`flow.spec.ts`（nonce 1：瀏覽器持續拒絕儲存 hash 時多次輪詢都帶 hash、「未儲存」提示與 hash 顯示、恢復儲存後提示消失且 hash 已存；nonce 2：錢包沒回 hash 且回報的答案遺失 → 結果不明、不提供 Send、紀錄保留、Track 之後找到它） |

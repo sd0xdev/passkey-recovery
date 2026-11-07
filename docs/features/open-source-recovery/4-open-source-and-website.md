@@ -1,6 +1,6 @@
 # Open-source release & website spec（規劃）
 
-> **Doc class**: Lifecycle — Phase 4 appendix（current authority）。**本 repo 尚未開源，也沒有部署任何網站。** 授權、repo 與託管已於 2026-10-31 由使用者決定（§1）；M5（2026-11-02）已在本機完成發布所需的檔案、export、掃描、CI 設定與 runner 套件，公開與部署仍是維護者步驟（[release plan](../../release/release-plan.md)、[deploy plan](../../release/deploy-plan.md)）。
+> **Doc class**: Lifecycle — Phase 4 appendix（current authority）。**現況（2026-11-07）：原始碼已公開（`github.com/sd0xdev/passkey-recovery`，CI 通過）；Runner Release 與 tarball 尚未發布；網站尚未部署。** 授權、repo 與託管已於 2026-10-31 由使用者決定（§1）；M5（2026-11-02）已在本機完成發布所需的檔案、export、掃描、CI 設定與 runner 套件；tag、Release 與部署仍是維護者步驟（[release plan](../../release/release-plan.md)、[deploy plan](../../release/deploy-plan.md)）。
 > 上游：[2-tech-spec.md](./2-tech-spec.md) · 設計：[design-ui-ux-guidelines.md](./design-ui-ux-guidelines.md)
 
 ## 1. Release 現況（2026-11-02，M5 本機完成）
@@ -11,8 +11,8 @@
 | 依賴授權 | [`THIRD_PARTY_NOTICES.md`](../../../THIRD_PARTY_NOTICES.md)；`scripts/release/licenses.mjs --check` 檢查隨套件出貨的 npm 依賴（含 transitive）與允許清單，產生 `licenses/npm-shipped.txt` | — |
 | 合約 bytecode | 每份 bytecode 追到上游 commit 與 solc 設定；`scripts/release/rebuild-contracts.mjs` 從原始碼重建比對（[SOURCE.md](../../../registry/coinbase-smart-wallet-v1.1/SOURCE.md)）；GPL／LGPL 原始碼與授權文字隨附於 `licenses/` | — |
 | 字型 | Atkinson Hyperlegible Next／Mono（SIL OFL 1.1），授權文字在 `licenses/`，build 時一併輸出 | — |
-| Repo 與官網 | `github.com/sd0xdev/passkey-recovery`；`wrangler.jsonc`（Workers Static Assets、workers.dev、wrangler 釘選）；dry-run 不上傳 | 維護者建立 repo、開啟 Private Vulnerability Reporting、部署並 read-back |
-| Git | 沒有 commit、沒有 remote | 由維護者以 export 的檔案集合建立初始 commit |
+| Repo 與官網 | `github.com/sd0xdev/passkey-recovery`；`wrangler.jsonc`（Workers Static Assets、workers.dev、wrangler 釘選）；dry-run 不上傳 | 維護者部署並 read-back（repo 已建立，Private Vulnerability Reporting 已開啟） |
+| Git | 公開 repo 的歷史只由 export 的檔案集合組成，不含開發 repo 的歷史 | 每次更新重新 export＋掃描，再以一般 push 更新 |
 | 個人資料 | §2：export＋掃描 0 命中 | 每次 release 重跑 |
 
 ## 2. 個人資料與秘密清理
@@ -76,7 +76,7 @@
 /guide          步驟：網站與本機 runner、bookmarklet 主流程、DevTools fallback、gas 模式
 /how-it-works   架構與信任邊界；開頭說明「你正在哪裡閱讀」（依 pageKind，6-recovery-atlas.md §10.4）
 /security       安全模型、回報方式、非官方聲明
-/download       發布狀態（尚未發布）、在你的資料夾 npm ci／build／pack、sha256、npm exec 命令、發布之後（規劃中）的 Release 網址（文字）；見 6-recovery-atlas.md §10.5
+/download       目前有什麼（原始碼已公開、Runner Release 尚未發布、網站尚未部署）、git clone→Node／npm→npm ci／build→npm run runner、本機打包 npm pack／sha256／npm exec、發布之後（規劃中）的 Release 網址（文字）；見 6-recovery-atlas.md §10.5
 其他            Not found 頁（hosted 與 runner 都回 HTTP 404）
 ```
 
@@ -94,7 +94,7 @@ Hosted build 為每頁寫一份 `<path>/index.html`（同一份 build），Worke
 | Who holds what | Each place holds only what it must, and only these channels connect them.（轄區圖四區與通道，逐項文案見 `src/ui/site/copy-site.ts` 的 `bound.*`；2026-11-02 PM 修訂後首頁只講這一次） | 每個地方只持有必要的東西，彼此之間只有這幾條通道。（同一組 `bound.*`） |
 | Status（2026-11-02 更新；`src/ui/site/copy-site.ts` 的 `ledger.*`，首頁以 status ledger 逐列呈現） | Early release. One mainnet transfer has been made and checked with this tool, using the runner's existing gas wallet mode (keystore + 1Password); the other gas modes are tested only on a synthetic test chain. The method it automates recovered one real Coinbase Smart Wallet v1.1 on Plasma. Not audited. | 早期版本。已用這個工具以 runner 的「既有 gas 錢包（keystore＋1Password）」模式完成並核對一筆 mainnet 轉帳；其他 gas 模式只在 synthetic 測試鏈上測試過。它自動化的方法曾救回 Plasma 上一個真實的 Coinbase Smart Wallet v1.1。尚未經過稽核。 |
 | Unofficial | Passkey Recovery is an independent project. It is not affiliated with, endorsed by, or supported by Coinbase or Plasma. | Passkey Recovery 是獨立專案，與 Coinbase、Plasma 無任何隸屬、背書或支援關係。 |
-| Credit（footer，`src/ui/copy.ts` 的 `footer.*`；「Source code」連到 `/download#dl-local`） | Built by sd0x · github.com/sd0xdev · Source code · Built with sd0x-harness · Apache-2.0 | 由 sd0x 製作 · github.com/sd0xdev · 原始碼 · 以 sd0x-harness 打造 · Apache-2.0 |
+| Credit（footer，`src/ui/copy.ts` 的 `footer.*`；「Source code」連到公開 repository） | Built by sd0x · github.com/sd0xdev · Source code · Built with sd0x-harness · Apache-2.0 | 由 sd0x 製作 · github.com/sd0xdev · 原始碼 · 以 sd0x-harness 打造 · Apache-2.0 |
 
 連結：harness `https://github.com/sd0xdev/sd0x-harness`、作者 `https://github.com/sd0xdev`。repo `https://github.com/sd0xdev/passkey-recovery`（`src/config/release.ts`）公開之前，網站不連到它：Download 只把規劃中的 Release 網址當文字列出，其他頁寫「原始碼資料夾裡的檔案」（2026-11-02 PM 修訂）。
 
@@ -119,7 +119,7 @@ Hosted build 為每頁寫一份 `<path>/index.html`（同一份 build），Worke
 |------|----------|
 | R0 規劃（本次） | 文件 review 通過 |
 | R1 私有 alpha | M1–M4 完成（2026-10-31，synthetic）；全部測試通過；secret scan 0 |
-| R2 公開原始碼 | LICENSE（Apache-2.0）加入；§2 清理完成；社群文件；CI 綠燈 —— 2026-11-02 本機完成檔案、export（掃描 0 命中、乾淨重建與測試通過）；CI 尚未在 GitHub 上跑過，repo 尚未建立 |
+| R2 公開原始碼 | LICENSE（Apache-2.0）加入；§2 清理完成；社群文件；CI 綠燈 —— 2026-11-02 本機完成檔案、export（掃描 0 命中、乾淨重建與測試通過）；2026-11-07 repo 建立、CI 通過 |
 | R3 官網 | §5 頁面完成；CSP 與 network log 檢查（使用者觸發配對前無 loopback 請求；握手只有 preflight、`/api/hello`、`/api/pair`；受保護 API 都帶 pair token；無第三方請求） —— 2026-11-02 頁面完成（`site.spec.ts`），尚未部署；部署與 runtime read-back 見 [deploy plan](../../release/deploy-plan.md) |
 | R4 extension（條件式） | ADR-001 S2 go＋ADR-002 |
 

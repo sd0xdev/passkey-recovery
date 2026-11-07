@@ -12,7 +12,7 @@ You can expect an acknowledgement within 7 days. This is a volunteer project wit
 
 ## Supported versions
 
-Only the latest release receives fixes. 0.x releases may change behaviour between minor versions.
+No Release is published yet, so fixes go to the latest `main`. Once Releases exist, only the latest one receives fixes. 0.x releases may change behaviour between minor versions.
 
 ## Scope
 

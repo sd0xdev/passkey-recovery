@@ -69,8 +69,10 @@ test('website, unpaired: the strip says the page alone cannot read the chain and
   await expect(page.getByTestId('check-run')).not.toContainText('Checking');
   await page.getByTestId('caps-pair').click();
   await expect(page.getByTestId('sheet-pair')).toBeVisible();
-  // Specific next steps: a fixed-version command, then wait for the code, then Connect.
-  await expect(page.getByTestId('pair-command')).toContainText('passkey-recovery-0.2.0.tgz');
+  // Specific next steps: the command for a built clone (no package file is published), then wait for the code, then Connect.
+  await expect(page.getByTestId('pair-command')).toContainText('npm run runner --');
+  await expect(page.getByTestId('pair-command')).not.toContainText('.tgz');
+  await expect(page.getByTestId('pair-steps-link')).toHaveAttribute('href', '/download');
   // The website is https: the command allowlists exactly this origin (the http case is a static preview with no
   // pairing at all — runner-preview.spec.ts, RUN-3).
   await expect(page.getByTestId('pair-command')).toContainText(`--allow-origin ${new URL(E2E_HOSTED).origin}`);

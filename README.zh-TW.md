@@ -36,18 +36,28 @@ Passkey 只能替它所屬的網站簽署，所以簽署發生在 Coinbase 自�
 
 ## 安裝與執行
 
-需要 Node.js **24.22.1** 與 npm **11.19.1**。完整步驟見 [docs/INSTALL.zh-TW.md](docs/INSTALL.zh-TW.md)。
+需要 Git、Node.js **24.22.1** 與 npm **11.19.1**。完整步驟見 [docs/INSTALL.zh-TW.md](docs/INSTALL.zh-TW.md)。
 
-repository 與它的 Release 都還沒有發布。從你已有的原始碼資料夾：
+| | 狀態 |
+|-|------|
+| 原始碼 | 原始碼已公開：[github.com/sd0xdev/passkey-recovery](https://github.com/sd0xdev/passkey-recovery) |
+| Runner 套件 | 尚未發布：目前沒有可下載的 GitHub Release 或 tarball，也沒有上 npm registry |
+| 網站 | 網站尚未部署 |
+
+所以請從 clone 原始碼開始：
 
 ```bash
+git clone https://github.com/sd0xdev/passkey-recovery.git
+cd passkey-recovery
+nvm install 24.22.1            # 其他版本管理工具從 .nvmrc 讀取同一個版本
+npm -v                         # 若比 11.19.1 舊：npm install -g npm@11.19.1
 npm ci
 npm run build
 npm run runner                 # 工具在 http://127.0.0.1:4171/recover（只有這台電腦）
-# 或一步完成：npm run preview   （先 build，再以 4171 啟動 runner）
+# 或一步完成 build 與啟動：npm run preview
 ```
 
-打包成一個套件檔（未上 npm registry）：
+同一個 runner 也可以打包成一個你自己做的套件檔，在 build 之後於同一個資料夾：
 
 ```bash
 npm pack                                        # 產生 passkey-recovery-0.2.0.tgz
@@ -55,7 +65,7 @@ shasum -a 256 passkey-recovery-0.2.0.tgz        # 記下你執行的是哪個檔
 npm exec --yes --package ./passkey-recovery-0.2.0.tgz -- passkey-recovery
 ```
 
-發布之後（規劃中），同一個檔案與它的 sha256 會放在 GitHub Release；見 [docs/INSTALL.zh-TW.md](docs/INSTALL.zh-TW.md) §2c。
+規劃會發布 Release，放上這個檔案與它的 sha256；它目前還不存在。見 [docs/INSTALL.zh-TW.md](docs/INSTALL.zh-TW.md) §2c。
 
 Runner 只綁 `127.0.0.1`，第一次需要模擬時才啟動 sha256 釘選的 Anvil（npm optional dependency）。`Ctrl-C` 會結束它與它啟動的每個程序。要讓網站與你的 runner 配對，以 `--allow-origin https://<網站>` 啟動，並輸入它印出的代碼。沒有 runner 時，網站只提供指南與 bookmarklet：檢查錢包、模擬與送出都需要已配對的 runner，不會改用任何雲端服務。
 
@@ -70,7 +80,7 @@ Runner 只綁 `127.0.0.1`，第一次需要模擬時才啟動 sha256 釘選的 A
 
 ## 狀態
 
-版本 0.2.0。這個工具自動化的方法曾救回 Plasma 上一個真實的 Coinbase Smart Wallet v1.1；工具本身已用 runner 的「既有 gas 錢包（keystore＋1Password）」模式完成並核對一筆 mainnet 轉帳；其他 gas 模式只在 synthetic 測試鏈上測試過。尚未經過稽核。本機或 fork 模擬不等於 mainnet：只有你送出、且 **Track** 顯示 `confirmed` 或 `final` 的交易才代表鏈上狀態。
+版本 0.2.0：原始碼已公開、沒有已發布的 Release、網站尚未部署（見[安裝與執行](#安裝與執行)）。這個工具自動化的方法曾救回 Plasma 上一個真實的 Coinbase Smart Wallet v1.1；工具本身已用 runner 的「既有 gas 錢包（keystore＋1Password）」模式完成並核對一筆 mainnet 轉帳；其他 gas 模式只在 synthetic 測試鏈上測試過。尚未經過稽核。本機或 fork 模擬不等於 mainnet：只有你送出、且 **Track** 顯示 `confirmed` 或 `final` 的交易才代表鏈上狀態。
 
 ## 開發
 

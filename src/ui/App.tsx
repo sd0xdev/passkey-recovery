@@ -7,7 +7,8 @@ import { pageKind } from './api';
 import { LangProvider, useT, type MsgKey } from './i18n';
 import { SiteHeader, SitePage, NotFound } from './site/Site';
 import { useRoute } from './site/router';
-import { PATH, type Route } from './site/routes';
+import { REPO_URL } from '../config/release';
+import type { Route } from './site/routes';
 import '@fontsource/atkinson-hyperlegible-next/400.css';
 import '@fontsource/atkinson-hyperlegible-next/700.css';
 import '@fontsource/atkinson-hyperlegible-next/800.css';
@@ -112,7 +113,7 @@ function Shell() {
       <footer className="lb-footer">
         <p>{t('footer.unofficial')}</p>
         <p>
-          {t('footer.credit')} · <a href="https://github.com/sd0xdev">github.com/sd0xdev</a> · <a href={`${PATH.download}#dl-local`}>{t('footer.source')}</a> · <a href="https://github.com/sd0xdev/sd0x-harness">{t('footer.harness')}</a> · {t('footer.license')}
+          {t('footer.credit')} · <a href="https://github.com/sd0xdev">github.com/sd0xdev</a> · <a href={REPO_URL}>{t('footer.source')}</a> · <a href="https://github.com/sd0xdev/sd0x-harness">{t('footer.harness')}</a> · {t('footer.license')}
         </p>
       </footer>
     </div>

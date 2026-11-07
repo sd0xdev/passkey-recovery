@@ -12,26 +12,49 @@ Passkey Recovery runs in two places that share the same interface:
 | Gas wallet: browser wallet, File (browser) | Yes | Yes |
 | Gas wallet: File (native), 1Password, existing gas wallet | Only while paired with your local runner (the key stays in its signer) | Yes |
 
-The website has not been deployed yet. Until it is, use the local runner.
+What exists today: the source code is public on [GitHub](https://github.com/sd0xdev/passkey-recovery); there is no GitHub Release or tarball to download yet; the website is not deployed yet. Until it is, use the local runner, built from a clone (§2a).
 
 ## 1. Requirements
 
 - macOS (arm64 or x64), Linux (x64 or arm64) or Windows (x64 only; Windows on arm64 has no pinned Anvil build).
-- Node.js **24.22.1** and npm **11.19.1**. With a version manager: `nvm install 24.22.1` or `fnm use` in the source folder (`.nvmrc`).
+- Git, Node.js **24.22.1** and npm **11.19.1**. Installing them is step 2 of §2a.
 - A Chromium-based browser or Safari with your Coinbase Smart Wallet passkey.
 - A little XPL on Plasma in a wallet you control, for gas.
 
 Anvil (the local chain used for simulations) comes with the package as a pinned, sha256-checked npm optional dependency for your platform. To use your own build instead, set `CBPR_ANVIL=<path to anvil>`.
 
-## 2a. Build and run from your folder
+## 2a. Run from source
 
-The public repository and its GitHub Release are not published yet, so there is nothing to download. Start from the source folder you already have.
+1. Get the source code:
 
-1. In that folder, install the pinned dependencies, build and pack:
+   ```bash
+   git clone https://github.com/sd0xdev/passkey-recovery.git
+   cd passkey-recovery
+   ```
+
+2. In that folder, use the pinned tools. `nvm install 24.22.1` installs and selects Node.js; `fnm use` reads the same version from `.nvmrc`. Check npm with `npm -v`; if it is older than 11.19.1, run `npm install -g npm@11.19.1`. `npm ci` refuses versions outside that range (`package.json` `engines`).
+3. Install the pinned dependencies and build:
 
    ```bash
    npm ci
    npm run build
+   ```
+
+4. Start the runner (`npm run preview` does the build and this step in one):
+
+   ```bash
+   npm run runner
+   ```
+
+5. Open the address it prints, `http://127.0.0.1:4171/recover`. That page is the tool and needs no pairing.
+
+## 2b. Or run it as one package file
+
+After step 3 of §2a, the same folder can pack the same runner into one file. You make this file yourself; it is not a published Release.
+
+1. Pack it:
+
+   ```bash
    npm pack            # writes passkey-recovery-<version>.tgz
    ```
 
@@ -42,23 +65,13 @@ The public repository and its GitHub Release are not published yet, so there is 
    npm exec --yes --package ./passkey-recovery-<version>.tgz -- passkey-recovery
    ```
 
-4. Open the address it prints, `http://127.0.0.1:4171/`. That page is the tool and needs no pairing.
+4. Open the address it prints. It is the same tool.
 
 The package is not on the npm registry; `npm exec` installs it from the file into npm's cache only.
 
-## 2b. Run straight from the source folder
+## 2c. GitHub Release (planned, not published)
 
-Without packing, in the same folder:
-
-```bash
-npm ci
-npm run build
-npm run runner          # or, in one step: npm run preview
-```
-
-## 2c. After publication (planned)
-
-Once the repository and a release are public, the planned route is: download `passkey-recovery-<version>.tgz` from the [releases page](https://github.com/sd0xdev/passkey-recovery/releases), compare its sha256 with the one published there, and run the same `npm exec` command as in 2a; or `git clone https://github.com/sd0xdev/passkey-recovery.git` and continue as in 2b. Neither exists yet.
+No tag, GitHub Release or tarball exists yet, so nothing can be downloaded. Once one is published, the planned route is: download `passkey-recovery-<version>.tgz` from the [releases page](https://github.com/sd0xdev/passkey-recovery/releases), compare its sha256 with the one published there, and run the same `npm exec` command as in §2b.
 
 ## 3. Runner options
 
@@ -74,7 +87,7 @@ While running: `p` prints a new pairing code, `u` ends all pairings, `q` or `Ctr
 
 ## 4. Pair the website with your runner
 
-1. Start the runner with `--allow-origin https://<the website origin>`. The Download page of the website shows the exact command.
+1. The website is not deployed yet, so this applies to a website you run yourself or to the official one once it exists. Start the runner with `--allow-origin https://<the website origin>` (from source: `npm run runner -- --allow-origin https://<the website origin>`). The Download page of the website shows the exact command.
 2. On the website, open **Recover**, press **Connect runner** and type the `XXXX-XXXX` code from your terminal.
 3. The pairing lives only in that tab. It ends after 30 minutes idle, on reload, or when the runner stops.
 

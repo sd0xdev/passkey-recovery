@@ -12,26 +12,49 @@ Passkey Recovery 在兩個地方執行，介面相同：
 | Gas 錢包：瀏覽器錢包、瀏覽器內 File | 可以 | 可以 |
 | Gas 錢包：File（native）、1Password、既有 gas 錢包 | 只有在與你的本機 runner 配對時（私鑰留在它的 signer） | 可以 |
 
-網站尚未部署；部署前請使用本機 runner。
+目前的狀態：原始碼已公開在 [GitHub](https://github.com/sd0xdev/passkey-recovery)；目前沒有可下載的 GitHub Release 或 tarball；網站尚未部署。部署前請使用本機 runner，從 clone 建置（§2a）。
 
 ## 1. 需求
 
 - macOS（arm64 或 x64）、Linux（x64 或 arm64），或 Windows（只支援 x64；Windows arm64 沒有釘選的 Anvil build）。
-- Node.js **24.22.1** 與 npm **11.19.1**。使用版本管理工具：`nvm install 24.22.1`，或在原始碼資料夾執行 `fnm use`（`.nvmrc`）。
+- Git、Node.js **24.22.1** 與 npm **11.19.1**。安裝方式在 §2a 第 2 步。
 - 有你 Coinbase Smart Wallet Passkey 的 Chromium 系瀏覽器或 Safari。
 - 一個你自己控制、在 Plasma 上有少量 XPL 的錢包，用來付 gas。
 
 模擬用的本機鏈 Anvil 會隨套件安裝：依平台釘選版本、檢查 sha256 的 npm optional dependency。要改用你自己的 build，設定 `CBPR_ANVIL=<anvil 路徑>`。
 
-## 2a. 在你的資料夾建置並執行
+## 2a. 從原始碼執行
 
-公開 repository 與它的 GitHub Release 都還沒有發布，所以目前沒有可下載的檔案。請從你已有的原始碼資料夾開始。
+1. 取得原始碼：
 
-1. 在那個資料夾安裝 pinned 相依套件、建置並打包：
+   ```bash
+   git clone https://github.com/sd0xdev/passkey-recovery.git
+   cd passkey-recovery
+   ```
+
+2. 在那個資料夾使用釘選的工具。`nvm install 24.22.1` 會安裝並選用 Node.js；`fnm use` 從 `.nvmrc` 讀取同一個版本。用 `npm -v` 檢查 npm；如果比 11.19.1 舊，請執行 `npm install -g npm@11.19.1`。`npm ci` 會拒絕這個範圍以外的版本（`package.json` 的 `engines`）。
+3. 安裝 pinned 相依套件並建置：
 
    ```bash
    npm ci
    npm run build
+   ```
+
+4. 啟動 runner（`npm run preview` 會一次完成 build 與這一步）：
+
+   ```bash
+   npm run runner
+   ```
+
+5. 開啟它印出的網址 `http://127.0.0.1:4171/recover`。那個頁面就是工具本身，不需要配對。
+
+## 2b. 或打包成一個套件檔執行
+
+完成 §2a 第 3 步後，同一個資料夾可以把同一個 runner 打包成一個檔案。這個檔案是你自己做的，不是已發布的 Release。
+
+1. 打包：
+
+   ```bash
    npm pack            # 產生 passkey-recovery-<version>.tgz
    ```
 
@@ -42,23 +65,13 @@ Passkey Recovery 在兩個地方執行，介面相同：
    npm exec --yes --package ./passkey-recovery-<version>.tgz -- passkey-recovery
    ```
 
-4. 開啟它印出的網址 `http://127.0.0.1:4171/`。那個頁面就是工具本身，不需要配對。
+4. 開啟它印出的網址。那是同一個工具。
 
 這個套件沒有上 npm registry；`npm exec` 只會從檔案安裝到 npm 的 cache。
 
-## 2b. 直接從原始碼資料夾執行
+## 2c. GitHub Release（規劃中，尚未發布）
 
-不打包，在同一個資料夾：
-
-```bash
-npm ci
-npm run build
-npm run runner          # 或一步完成：npm run preview
-```
-
-## 2c. 發布之後（規劃中）
-
-repository 與 release 公開之後，規劃的方式是：從 [releases 頁面](https://github.com/sd0xdev/passkey-recovery/releases) 下載 `passkey-recovery-<version>.tgz`，與那裡公布的 sha256 比對，再執行 2a 的同一個 `npm exec` 指令；或 `git clone https://github.com/sd0xdev/passkey-recovery.git` 後照 2b 繼續。這兩者目前都還不存在。
+目前沒有 tag、GitHub Release 或 tarball，所以沒有東西可以下載。發布之後，規劃的方式是：從 [releases 頁面](https://github.com/sd0xdev/passkey-recovery/releases) 下載 `passkey-recovery-<version>.tgz`，與那裡公布的 sha256 比對，再執行 §2b 的同一個 `npm exec` 指令。
 
 ## 3. Runner 選項
 
@@ -74,7 +87,7 @@ repository 與 release 公開之後，規劃的方式是：從 [releases 頁面]
 
 ## 4. 讓網站與你的 runner 配對
 
-1. 以 `--allow-origin https://<網站 origin>` 啟動 runner；網站的 Download 頁面會顯示完整命令。
+1. 網站尚未部署，所以這一節適用於你自己架設的網站，或之後的官方網站。以 `--allow-origin https://<網站 origin>` 啟動 runner（從原始碼：`npm run runner -- --allow-origin https://<網站 origin>`）；網站的 Download 頁面會顯示完整命令。
 2. 在網站開啟 **Recover**，按 **連接 runner**（英文介面為 Connect runner），輸入終端機顯示的 `XXXX-XXXX` 代碼。
 3. 配對只存在該分頁；閒置 30 分鐘、重新整理或 runner 結束時即失效。
 

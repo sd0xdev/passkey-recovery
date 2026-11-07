@@ -36,18 +36,28 @@ The wallet you recover is the *passkey source account*. A separate **gas wallet*
 
 ## Install and run
 
-You need Node.js **24.22.1** and npm **11.19.1**. Full steps: [docs/INSTALL.md](docs/INSTALL.md).
+You need Git, Node.js **24.22.1** and npm **11.19.1**. Full steps: [docs/INSTALL.md](docs/INSTALL.md).
 
-The repository and its Release are not published yet. From the source folder you have:
+| | Status |
+|-|--------|
+| Source code | The source code is public: [github.com/sd0xdev/passkey-recovery](https://github.com/sd0xdev/passkey-recovery) |
+| Runner package | Not published: there is no GitHub Release or tarball to download yet, and it is not on the npm registry |
+| Website | The website is not deployed yet |
+
+So the way in is a clone of the source:
 
 ```bash
+git clone https://github.com/sd0xdev/passkey-recovery.git
+cd passkey-recovery
+nvm install 24.22.1            # other version managers read the same version from .nvmrc
+npm -v                         # if older than 11.19.1: npm install -g npm@11.19.1
 npm ci
 npm run build
 npm run runner                 # tool on http://127.0.0.1:4171/recover (this computer only)
-# or, in one step: npm run preview   (build, then the runner on 4171)
+# or, build and start in one step: npm run preview
 ```
 
-The same as one package file (not on the npm registry):
+The same runner as one package file you make yourself, from that folder after the build:
 
 ```bash
 npm pack                                        # writes passkey-recovery-0.2.0.tgz
@@ -55,7 +65,7 @@ shasum -a 256 passkey-recovery-0.2.0.tgz        # note which file you ran
 npm exec --yes --package ./passkey-recovery-0.2.0.tgz -- passkey-recovery
 ```
 
-After publication (planned), the same file and its sha256 will be on the GitHub Release; see [docs/INSTALL.md](docs/INSTALL.md) §2c.
+A published Release is planned, with that file and its sha256; it does not exist yet. See [docs/INSTALL.md](docs/INSTALL.md) §2c.
 
 The runner binds to `127.0.0.1` only and starts a sha256-pinned Anvil (an npm optional dependency) the first time it needs to simulate. `Ctrl-C` stops it and every process it started. To let the website pair with your runner, start it with `--allow-origin https://<site>` and enter the code it prints. Without a runner the website shows the guide and the bookmarklet only: checking a wallet, simulating and sending all need a paired runner. Nothing falls back to a cloud service.
 
@@ -70,7 +80,7 @@ Details: [SECURITY.md](SECURITY.md) and [docs/features/open-source-recovery/3-ar
 
 ## Status
 
-Version 0.2.0. The method this tool automates recovered one real Coinbase Smart Wallet v1.1 on Plasma; with the tool itself, one mainnet transfer has been made and checked using the runner's existing gas wallet mode (keystore + 1Password); the other gas modes are tested only on synthetic test chains. Not audited. A local or fork simulation is not mainnet: only a transaction you sent and that **Track** shows as `confirmed` or `final` reflects the chain.
+Version 0.2.0: public source, no published Release, website not deployed (see [Install and run](#install-and-run)). The method this tool automates recovered one real Coinbase Smart Wallet v1.1 on Plasma; with the tool itself, one mainnet transfer has been made and checked using the runner's existing gas wallet mode (keystore + 1Password); the other gas modes are tested only on synthetic test chains. Not audited. A local or fork simulation is not mainnet: only a transaction you sent and that **Track** shows as `confirmed` or `final` reflects the chain.
 
 ## Development
 

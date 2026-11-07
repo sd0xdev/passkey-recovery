@@ -203,7 +203,16 @@ test('Home: the hero leads to the tool and to the plates; the status ledger stat
   await expect(page.getByTestId('home-mainnet')).not.toContainText(/0x[0-9a-f]{8,}/i);
   await expect(page.getByTestId('home-status')).toContainText('Not audited');
   await expect(page.getByTestId('home-status')).toContainText('not affiliated with, endorsed by, or supported by');
-  await expect(page.getByTestId('home-release')).toContainText('Not published yet');
+  // Three separate facts: the source is public, the runner Release is not published, the website is not deployed.
+  await expect(page.getByTestId('home-source')).toContainText('Public on GitHub');
+  await expect(page.getByTestId('home-source').locator('a')).toHaveAttribute('href', 'https://github.com/sd0xdev/passkey-recovery');
+  await expect(page.getByTestId('home-release')).toContainText('Not published');
+  await expect(page.getByTestId('home-website')).toContainText('Not deployed yet');
+  await page.getByTestId('lang-toggle').click();
+  await expect(page.getByTestId('home-source')).toContainText('已公開在 GitHub');
+  await expect(page.getByTestId('home-release')).toContainText('尚未發布');
+  await expect(page.getByTestId('home-website')).toContainText('尚未部署');
+  await page.getByTestId('lang-toggle').click();
   await expect(page.getByTestId('home-faq').locator('details')).toHaveCount(6);
   await page.getByTestId('home-cta-tool').click();
   await onPage(page, 'recover');
@@ -215,7 +224,21 @@ test('Home: the hero leads to the tool and to the plates; the status ledger stat
   await onPage(page, 'recover');
 });
 
-test('Home rhythm (PM-03): hero → plates → is this for you → demo → who holds what, said once; the source link stays on the site', async ({ page }) => {
+test('tool help keeps the three publication facts apart and leads to the source steps, in EN and 繁中', async ({ page }) => {
+  await page.goto(`${E2E_HOSTED}/recover`);
+  await page.getByTestId('top-help').click();
+  const help = page.getByTestId('help');
+  for (const text of ['public on GitHub', 'No runner Release or tarball is published yet', 'the website is not deployed']) await expect(help).toContainText(text);
+  await expect(help.locator('a[href="/download"]')).toHaveCount(1);
+  await expect(help.locator('a[href="https://github.com/sd0xdev/passkey-recovery"]')).toHaveCount(1);
+  await expect(help.locator('a[href*="/releases"]')).toHaveCount(0);
+  await page.getByTestId('sheet-help-close').click();
+  await page.getByTestId('lang-toggle').click();
+  await page.getByTestId('top-help').click();
+  for (const text of ['已公開在 GitHub', 'Runner Release 與 tarball 尚未發布', '網站也尚未部署']) await expect(help).toContainText(text);
+});
+
+test('Home rhythm (PM-03): hero → plates → is this for you → demo → who holds what, said once; the source link opens the public repository', async ({ page }) => {
   await page.goto(`${E2E_HOSTED}/`);
   const order = ['.lb-chart-hero', '#how-plates', '[data-testid="home-fit"]', '[data-testid="atlas-demo"]', '[data-testid="atlas-boundary"]', '[data-testid="home-status"]', '[data-testid="home-faq"]', '[data-testid="home-cta-again"]'];
   const tops = await page.evaluate((sel) => sel.map((q) => document.querySelector(q)!.getBoundingClientRect().top + scrollY), order);
@@ -230,8 +253,7 @@ test('Home rhythm (PM-03): hero → plates → is this for you → demo → who 
   await expect(channels.locator('li')).toHaveCount(4);
   await expect(channels.locator('li').first()).toBeVisible();
   await expect(page.getByTestId('home-hold-more')).toHaveAttribute('href', '/how-it-works');
-  // The repository is not public: the footer's Source code leads to building it from the reader's own folder.
-  await expect(page.locator('footer.lb-footer a', { hasText: 'Source code' })).toHaveAttribute('href', '/download#dl-local');
+  await expect(page.locator('footer.lb-footer a', { hasText: 'Source code' })).toHaveAttribute('href', 'https://github.com/sd0xdev/passkey-recovery');
 });
 
 test('Demo (PM-03): one labelled still at a time, stepped by the named buttons or Previous / Next, and unseen stills are not fetched', async ({ page }) => {
@@ -314,26 +336,40 @@ test('the static 404 page is plain, bilingual and script-free', async ({ page })
   await axeClean(page, '404.html');
 });
 
-test('Download (PM-05): the release is marked unpublished, the build runs from the reader’s folder, and the future Release address is text, not a link', async ({ page }) => {
+test('Download: the source is public, the Release unpublished, the website undeployed; a clone builds and runs, the package file is made locally, and the future Release address is text, not a link', async ({ page }) => {
   await page.goto(`${E2E_HOSTED}/download`);
   await expect(page.getByTestId('dl-version')).toHaveText(pkg.version);
   await expect(page.getByTestId('dl-file')).toHaveText(TARBALL);
-  await expect(page.getByTestId('dl-release-status')).toContainText('Not published yet');
-  await expect(page.getByTestId('dl-source-cmd')).toContainText('npm ci\nnpm run build\nnpm pack');
-  await expect(page.getByTestId('dl-source-cmd')).not.toContainText('git clone');
+  await expect(page.getByTestId('dl-source-status')).toContainText('Public on GitHub');
+  await expect(page.getByTestId('dl-release-status')).toContainText('Not published');
+  await expect(page.getByTestId('dl-website-status')).toContainText('Not deployed yet');
+  // The steps run in this order on a first visit: clone, then Node and npm (.nvmrc is in the clone), build, runner.
+  const order = ['dl-clone', 'dl-node', 'dl-source-cmd', 'dl-runner', 'dl-pack-cmd', 'dl-sha', 'dl-run'];
+  const tops = await page.evaluate((ids) => ids.map((id) => document.querySelector(`[data-testid="${id}"]`)!.getBoundingClientRect().top), order);
+  expect(tops).toEqual([...tops].sort((a, b) => a - b));
+  await expect(page.getByTestId('dl-clone')).toContainText('git clone https://github.com/sd0xdev/passkey-recovery.git\ncd passkey-recovery');
+  await expect(page.getByTestId('dl-node')).toContainText('nvm install 24.22.1');
+  await expect(page.getByTestId('dl-source-cmd')).toContainText('npm ci\nnpm run build');
+  await expect(page.getByTestId('dl-runner')).toContainText('npm run runner');
+  await expect(page.getByTestId('dl-pack-cmd')).toContainText('npm pack');
   await expect(page.getByTestId('dl-sha')).toContainText(`shasum -a 256 ${TARBALL}`);
   await expect(page.getByTestId('dl-run')).toContainText(`npm exec --yes --package ./${TARBALL} -- passkey-recovery`);
   // The planned Release address is stated, never offered as a link to a page that does not exist yet.
   await expect(page.getByTestId('dl-release-future')).toHaveText(`https://github.com/sd0xdev/passkey-recovery/releases/tag/v${pkg.version}`);
   await expect(page.getByTestId('dl-release')).toHaveCount(0);
-  const repoLinks = await page.locator('main a[href*="github.com/sd0xdev/passkey-recovery"]').count();
-  expect(repoLinks).toBe(0);
-  // On the https website the command names this exact origin, which is what the runner allowlists.
+  // The only repository link is to the source itself: nothing points at a release or a download that does not exist.
+  const repoLinks = await page.locator('main a[href*="github.com/sd0xdev/passkey-recovery"]').evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).href));
+  expect(repoLinks).toEqual(['https://github.com/sd0xdev/passkey-recovery']);
+  await expect(page.locator('main a[href*="/releases"]')).toHaveCount(0);
+  await expect(page.locator('main a[href$=".tgz"]')).toHaveCount(0);
+  // On the https website each command names this exact origin, which is what the runner allowlists.
+  await expect(page.getByTestId('dl-runner-origin')).toContainText(`npm run runner -- --allow-origin ${new URL(E2E_HOSTED).origin}`);
   await expect(page.getByTestId('dl-run-origin')).toContainText(`npm exec --yes --package ./${TARBALL} -- passkey-recovery --allow-origin ${new URL(E2E_HOSTED).origin}`);
   // The same build on http (wrangler dev) is refused as a pairing origin by the runner: the command is not offered.
   await page.goto(`${E2E_HOSTED_HTTP}/download`);
   await expect(page.getByTestId('dl-run')).toContainText(`npm exec --yes --package ./${TARBALL} -- passkey-recovery`);
   await expect(page.getByTestId('dl-run-origin')).toHaveCount(0);
+  await expect(page.getByTestId('dl-runner-origin')).toHaveCount(0);
 });
 
 test('mode notes follow where the page is (PM-04): runner page uses the tool directly, the https website pairs, an http preview has no runner', async ({ page }) => {
@@ -350,7 +386,7 @@ test('mode notes follow where the page is (PM-04): runner page uses the tool dir
       await expect(note, `${c.kind} ${path}`).toHaveAttribute('data-kind', c.kind);
       await expect(note.locator('h3'), `${c.kind} ${path}`).toHaveText(c.title);
       await expect(note.getByTestId('mode-run-origin'), `${c.kind} ${path}`).toHaveCount(c.origin ? 1 : 0);
-      if (c.origin) await expect(note.getByTestId('mode-run-origin')).toContainText(`--allow-origin ${new URL(E2E_HOSTED).origin}`);
+      if (c.origin) await expect(note.getByTestId('mode-run-origin')).toContainText(`npm run runner -- --allow-origin ${new URL(E2E_HOSTED).origin}`);
       if (c.kind === 'runner') await expect(note, path).toContainText('nothing to pair');
       if (c.kind === 'static-preview') await expect(note, path).toContainText(`${new URL(c.base).origin} is a static preview`);
     }

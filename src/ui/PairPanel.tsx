@@ -1,10 +1,11 @@
-// Hosted website ↔ local runner pairing (HOST-05/06). The user starts the runner (npm exec on the downloaded
-// package); it prints a short pairing code. One press of Connect first asks the runner who it is
+// Hosted website ↔ local runner pairing (HOST-05/06). The user starts the runner (npm run runner in a built
+// clone of the source); it prints a short pairing code. One press of Connect first asks the runner who it is
 // (protocol, version) and then exchanges the code for a short session held in memory only. Nothing is
 // paired automatically, nothing is scanned: only the one http://127.0.0.1:<port> address is asked, and
 // only when the user presses Connect.
 import { useId, useState } from 'react';
-import { pairableOrigin, runnerCommand } from '../config/release';
+import { pairableOrigin, sourceRunnerCommand } from '../config/release';
+import { PATH } from './site/routes';
 import { ApiError, hello, pair, pairedRunner, runnerBase, RUNNER_PROTOCOL, unpair } from './api';
 import { useT } from './i18n';
 import { Field, Notice } from './primitives';
@@ -34,7 +35,7 @@ export function PairPanel({ onPaired }: { onPaired?: () => void }) {
   // Only an https page is a pairable origin; on http (a local preview) the command leaves --allow-origin out
   // instead of offering one the runner would refuse.
   const origin = pairableOrigin(location.origin);
-  const command = runnerCommand(origin);
+  const command = sourceRunnerCommand(origin);
   const normal = pairingCode(code);
   let base: string | null = null;
   try {
@@ -105,7 +106,7 @@ export function PairPanel({ onPaired }: { onPaired?: () => void }) {
       <p className="lb-lead">{t('pair.lead')}</p>
       <ol className="lb-howto lb-pair-steps">
         <li>
-          {t('pair.step1')}
+          {t('pair.step1')} <a href={PATH.download} data-testid="pair-steps-link">{t('pair.step1.link')}</a>
           <pre className="lb-code-block" tabIndex={0} data-testid="pair-command">
             {command}
           </pre>

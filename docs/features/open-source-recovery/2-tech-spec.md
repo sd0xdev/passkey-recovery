@@ -17,6 +17,8 @@
 
 **不宣稱**：mainnet 上以本產品完成過轉帳（只在 synthetic testchain 驗證）；「不需要 Console」（真實 passkey 層完成前，README／官網不得使用此字樣，UI 只可在 bridge 區塊標示預覽，與 `src/ui/ExtensionBridge.tsx` 一致）；hosted 網站已部署（只有 `dist-hosted/` build）。
 
+> **Update(2026-11-07)**：公開 repository `sd0xdev/passkey-recovery` 已建立、CI 通過。上表 M5 的「未公開」與「repo 建立、CI 執行待維護者」自此縮小為：tag、GitHub Release、tarball 與網站部署仍待維護者。
+
 > **Update(2026-11-02)**：PM 以 runner 的「既有 gas 錢包（keystore＋1Password）」模式完成一筆 1 USDT0 mainnet 轉帳並自行核對（PM 紀錄，不公開 tx 細節）。上面「不宣稱 mainnet 轉帳」自此縮小為：不宣稱其他 gas 模式或其他流程已在 mainnet 驗證，也不把這一次概括成整體已驗證。
 
 ### 0.1 Acceptance Ledger（M1、M2）

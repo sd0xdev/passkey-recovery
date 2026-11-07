@@ -77,7 +77,7 @@ export const HELP = `passkey-recovery — local runner for Passkey Recovery by s
 
   passkey-recovery [--port ${DEFAULT_PORT}] [--allow-origin https://<your site>] [--no-native-signer]
 
-  From the downloaded package (not on the npm registry yet), in its folder:
+  From a package file you built with npm pack (no published Release or npm registry package yet), in its folder:
     npm exec --yes --package ./passkey-recovery-<version>.tgz -- passkey-recovery [options]
   From a source checkout:  npm run runner -- [options]
 
