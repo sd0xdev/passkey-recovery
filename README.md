@@ -21,7 +21,7 @@ An open-source tool you run on your own computer. If you created a **Coinbase Sm
 3. **Move funds** — choose asset, amount and recipient, preview, sign the UserOperation hash with your passkey, review the **signed simulation** on a local Anvil fork, then press **Send**.
 4. **Track** — follows the receipt; survives a page reload or a runner restart, and never resends on its own.
 
-Signing with the passkey happens on Coinbase's own page (`keys.coinbase.com`), because a passkey only signs for the site it belongs to. The main way is a **bookmarklet** you drag to your bookmarks bar; an advanced **DevTools fallback** exists for browsers that block bookmarklets. Both only accept a one-time code from this tool and only run on the Coinbase origin.
+Signing with the passkey happens on Coinbase's own page (`keys.coinbase.com`), because a passkey only signs for the site it belongs to. The main way is a **bookmarklet** you drag to your bookmarks bar; an advanced **DevTools fallback** exists for browsers that block bookmarklets. The bookmarklet takes a request code from this tool. The fallback is a short script this tool generates for that one signature, which you paste into the Console. Both only run on the Coinbase origin.
 
 ### Gas wallet modes
 
@@ -95,6 +95,10 @@ Version 0.2.0: public source, no published Release, website not deployed (see [I
 | `npm run release:licenses`, `release:scan`, `release:rebuild-contracts` | License check, secret and privacy scan, contract rebuild | Rebuild only |
 
 Contributing: [CONTRIBUTING.md](CONTRIBUTING.md) · Code of conduct: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · Design docs (Traditional Chinese): [docs/features/open-source-recovery/](docs/features/open-source-recovery/2-tech-spec.md).
+
+## Support the project
+
+If this tool helped you, you can make a voluntary one-time contribution: [Support Passkey Recovery](https://buy.stripe.com/8x2eVdfSh6KZ4mf6wm0sU06). Stripe handles the payment and Welfree Studio, Ltd. receives it, to help pay for maintenance, testing and documentation. A contribution does not buy support or priority and does not make a recovery more likely to succeed. Every feature works without one.
 
 ## License
 

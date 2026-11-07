@@ -21,7 +21,7 @@
 3. **Move funds**：選資產、金額、收款地址 → 預覽 → 用 Passkey 簽 UserOperation hash → 在本機 Anvil fork 上檢查**已簽模擬** → 按下 **Send**。
 4. **Track**：追蹤到 receipt；重新整理或 runner 重啟後仍可追蹤，永不自動重送。
 
-Passkey 只能替它所屬的網站簽署，所以簽署發生在 Coinbase 自己的頁面（`keys.coinbase.com`）。主要方式是拖到書籤列的 **bookmarklet**；瀏覽器擋 bookmarklet 時，另有進階的 **DevTools fallback**。兩者都只接受本工具產生的一次性代碼，也只在 Coinbase 的 origin 上執行。
+Passkey 只能替它所屬的網站簽署，所以簽署發生在 Coinbase 自己的頁面（`keys.coinbase.com`）。主要方式是拖到書籤列的 **bookmarklet**；瀏覽器擋 bookmarklet 時，另有進階的 **DevTools fallback**。Bookmarklet 接受本工具產生的 request code；fallback 則是本工具為這次簽署產生的一小段 script，要貼到 Console 執行。兩者都只在 Coinbase 的 origin 上執行。
 
 ### Gas 錢包模式
 
@@ -95,6 +95,10 @@ Runner 只綁 `127.0.0.1`，第一次需要模擬時才啟動 sha256 釘選的 A
 | `npm run release:licenses`、`release:scan`、`release:rebuild-contracts` | 授權檢查、秘密與隱私掃描、合約重建 | 只有重建需要 |
 
 貢獻：[CONTRIBUTING.md](CONTRIBUTING.md)・行為準則：[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)・設計文件：[docs/features/open-source-recovery/](docs/features/open-source-recovery/2-tech-spec.md)。
+
+## 支持這個專案
+
+如果這個工具幫上了忙，你可以自願單次贊助：[支持 Passkey Recovery](https://buy.stripe.com/8x2eVdfSh6KZ4mf6wm0sU06)。款項由 Stripe 處理、Welfree Studio, Ltd. 收取，用於維護、測試與文件。贊助不會換得支援或優先處理，也不會提高救援成功的機會。不贊助也能使用所有功能。
 
 ## 授權
 
