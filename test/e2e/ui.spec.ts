@@ -8,6 +8,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
+import { SPONSOR_URL } from '../../src/config/release';
 import { base64urlToBytes, hexToBytes } from '../../src/crypto/bytes';
 import { E2E_PROVIDER, type E2eWorld } from '../support/e2e-constants';
 import { installMockWallet } from '../support/mockWallet';
@@ -622,11 +623,11 @@ test('static build without the sidecar: a real error state, no inert steps, no e
   await expect(page.locator('html')).toHaveAttribute('lang', 'zh-Hant-TW');
   await axe(page, 'no-sidecar/zh');
   await page.getByTestId('lang-toggle').click();
-  // The footer credits the author and links the public source and the harness; nothing else leaves the page.
+  // The footer credits the author and links the public source, the harness and the sponsor page; opening the page loads none of them.
   const footer = page.locator('footer.lb-footer');
   await expect(footer).toContainText('sd0x');
   const hrefs = await footer.locator('a').evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).href));
-  expect(hrefs).toEqual(expect.arrayContaining(['https://github.com/sd0xdev', 'https://github.com/sd0xdev/passkey-recovery', 'https://github.com/sd0xdev/sd0x-harness']));
+  expect(hrefs).toEqual(expect.arrayContaining(['https://github.com/sd0xdev', 'https://github.com/sd0xdev/passkey-recovery', 'https://github.com/sd0xdev/sd0x-harness', SPONSOR_URL]));
   if (SHOTS) await page.screenshot({ path: join(SHOTS, '00-no-sidecar-desktop-1440-en.png'), fullPage: true });
   expect(external).toEqual([]);
 });

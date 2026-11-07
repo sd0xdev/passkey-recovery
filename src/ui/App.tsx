@@ -7,7 +7,7 @@ import { pageKind } from './api';
 import { LangProvider, useT, type MsgKey } from './i18n';
 import { SiteHeader, SitePage, NotFound } from './site/Site';
 import { useRoute } from './site/router';
-import { REPO_URL } from '../config/release';
+import { REPO_URL, SPONSOR_URL } from '../config/release';
 import type { Route } from './site/routes';
 import '@fontsource/atkinson-hyperlegible-next/400.css';
 import '@fontsource/atkinson-hyperlegible-next/700.css';
@@ -111,6 +111,12 @@ function Shell() {
       </main>
 
       <footer className="lb-footer">
+        <p className="lb-footer-support">
+          <a className="lb-btn lb-btn-quiet" href={SPONSOR_URL} target="_blank" rel="noopener noreferrer" data-testid="footer-sponsor">
+            {t('footer.sponsor')}
+          </a>
+          <span>{t('footer.sponsorNote')}</span>
+        </p>
         <p>{t('footer.unofficial')}</p>
         <p>
           {t('footer.credit')} · <a href="https://github.com/sd0xdev">github.com/sd0xdev</a> · <a href={REPO_URL}>{t('footer.source')}</a> · <a href="https://github.com/sd0xdev/sd0x-harness">{t('footer.harness')}</a> · {t('footer.license')}

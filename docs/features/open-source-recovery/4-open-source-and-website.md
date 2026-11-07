@@ -95,6 +95,7 @@ Hosted build 為每頁寫一份 `<path>/index.html`（同一份 build），Worke
 | Status（2026-11-02 更新；`src/ui/site/copy-site.ts` 的 `ledger.*`，首頁以 status ledger 逐列呈現） | Early release. One mainnet transfer has been made and checked with this tool, using the runner's existing gas wallet mode (keystore + 1Password); the other gas modes are tested only on a synthetic test chain. The method it automates recovered one real Coinbase Smart Wallet v1.1 on Plasma. Not audited. | 早期版本。已用這個工具以 runner 的「既有 gas 錢包（keystore＋1Password）」模式完成並核對一筆 mainnet 轉帳；其他 gas 模式只在 synthetic 測試鏈上測試過。它自動化的方法曾救回 Plasma 上一個真實的 Coinbase Smart Wallet v1.1。尚未經過稽核。 |
 | Unofficial | Passkey Recovery is an independent project. It is not affiliated with, endorsed by, or supported by Coinbase or Plasma. | Passkey Recovery 是獨立專案，與 Coinbase、Plasma 無任何隸屬、背書或支援關係。 |
 | Credit（footer，`src/ui/copy.ts` 的 `footer.*`；「Source code」連到公開 repository） | Built by sd0x · github.com/sd0xdev · Source code · Built with sd0x-harness · Apache-2.0 | 由 sd0x 製作 · github.com/sd0xdev · 原始碼 · 以 sd0x-harness 打造 · Apache-2.0 |
+| 贊助（footer 的次要按鈕，`SPONSOR_URL`，與 `.github/FUNDING.yml` 同一個 Stripe 頁面；新分頁開啟，不帶 query，不在救援步驟內） | Sponsor this project | 贊助這個專案 |
 
 連結：harness `https://github.com/sd0xdev/sd0x-harness`、作者 `https://github.com/sd0xdev`。repo `https://github.com/sd0xdev/passkey-recovery`（`src/config/release.ts`）公開之前，網站不連到它：Download 只把規劃中的 Release 網址當文字列出，其他頁寫「原始碼資料夾裡的檔案」（2026-11-02 PM 修訂）。
 

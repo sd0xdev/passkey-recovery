@@ -97,12 +97,15 @@ describe('source scan', () => {
     expect(hits).toEqual([]);
   });
 
-  it('network origins: the public RPC, the Passkey page, loopback, and plain github.com links', () => {
+  it('network origins: the public RPC, the Passkey page, loopback, and plain github.com and sponsor links', () => {
     const urls = new Set(sources.flatMap((s) => s.text.match(/https?:\/\/[a-z0-9.-]+/gi) ?? []));
-    const allowed = new Set(['https://rpc.plasma.to', 'https://keys.coinbase.com', 'http://127.0.0.1', 'http://www.w3.org', 'https://github.com']);
+    const allowed = new Set(['https://rpc.plasma.to', 'https://keys.coinbase.com', 'http://127.0.0.1', 'http://www.w3.org', 'https://github.com', 'https://buy.stripe.com']);
     expect([...urls].filter((u) => !allowed.has(u))).toEqual([]);
-    // github.com is a link target only: never fetched, never a script or style source.
-    expect(sources.filter((s) => /fetch\([^)]*github\.com|src=["']https:\/\/github/.test(s.text)).map((s) => s.p)).toEqual([]);
+    // github.com and the sponsor page are link targets only: never fetched, never a script or style source.
+    expect(sources.filter((s) => /fetch\([^)]*(github\.com|stripe\.com)|src=["']https:\/\/(github|buy\.stripe)/.test(s.text)).map((s) => s.p)).toEqual([]);
+    // The sponsor origin is one exact URL in one file, so this allowance cannot grow into other Stripe paths or a query.
+    const sponsor = sources.flatMap((s) => (s.text.match(/https:\/\/buy\.stripe\.com[^\s'"`]*/g) ?? []).map((u) => `${s.p.replace(/\\/g, '/')} ${u}`));
+    expect(sponsor).toEqual(['src/config/release.ts https://buy.stripe.com/8x2eVdfSh6KZ4mf6wm0sU06']);
   });
 
   // M3-1: the original case's fixed values are gone from product code. Kept here as sha256 digests of the

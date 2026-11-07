@@ -397,6 +397,9 @@ body { background: #eef2f3; }
 /* ── Footer ── */
 .lb-footer { max-width: 1240px; margin: 0 auto; padding: var(--s5); border-top: 1px solid var(--rule); color: var(--chart); font-size: 14px; }
 .lb-footer p { margin: var(--s1) 0; max-width: none; }
+.lb-footer .lb-footer-support { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); margin-bottom: var(--s3); }
+.lb-footer-support > a { box-sizing: border-box; display: inline-flex; align-items: center; text-decoration: none; }
+.lb-footer-support > span { flex: 1 1 16rem; min-width: 0; }
 
 /* ── Preferences ── */
 @media (prefers-reduced-motion: reduce) {

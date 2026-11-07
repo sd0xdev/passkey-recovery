@@ -254,6 +254,14 @@ test('Home rhythm (PM-03): hero → plates → is this for you → demo → who 
   await expect(channels.locator('li').first()).toBeVisible();
   await expect(page.getByTestId('home-hold-more')).toHaveAttribute('href', '/how-it-works');
   await expect(page.locator('footer.lb-footer a', { hasText: 'Source code' })).toHaveAttribute('href', 'https://github.com/sd0xdev/passkey-recovery');
+  // The sponsor link stays a plain new-tab anchor to the one Stripe page, labelled in each language.
+  const sponsor = page.getByTestId('footer-sponsor');
+  await expect(sponsor).toHaveAttribute('href', 'https://buy.stripe.com/8x2eVdfSh6KZ4mf6wm0sU06');
+  await expect(sponsor).toHaveAttribute('target', '_blank');
+  await expect(sponsor).toHaveAttribute('rel', 'noopener noreferrer');
+  await expect(sponsor).toHaveText('Sponsor this project');
+  await page.getByTestId('lang-toggle').click();
+  await expect(sponsor).toHaveText('贊助這個專案');
 });
 
 test('Demo (PM-03): one labelled still at a time, stepped by the named buttons or Previous / Next, and unseen stills are not fetched', async ({ page }) => {

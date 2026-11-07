@@ -6,6 +6,8 @@ import { version } from '../../package.json';
 
 export const VERSION: string = version;
 export const REPO_URL = 'https://github.com/sd0xdev/passkey-recovery';
+/** Voluntary one-time support, the same page as .github/FUNDING.yml. Never add a query: no address or tracking. */
+export const SPONSOR_URL = 'https://buy.stripe.com/8x2eVdfSh6KZ4mf6wm0sU06';
 export const CLONE_COMMANDS = ['git clone https://github.com/sd0xdev/passkey-recovery.git', 'cd passkey-recovery'].join('\n');
 export const RELEASE_TAG = `v${VERSION}`;
 export const TARBALL = `passkey-recovery-${VERSION}.tgz`;

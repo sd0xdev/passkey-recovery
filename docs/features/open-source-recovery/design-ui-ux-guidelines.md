@@ -26,7 +26,7 @@ Subject 的語彙：救援、浮標、航海日誌（logbook）、艙單（manif
 | 「Don't use Liquid Glass in the content layer」「Use … sparingly」 | 每個畫面最多 2 個 glass 表面 |
 | Regular variant 會模糊並調整亮度以維持可讀性；clear 只用在視覺豐富的背景上 | 只用 regular 類效果（`backdrop-filter: blur(20px) saturate(140%)` ＋ 62% 不透明底色）；不做 clear |
 | iOS 27：更一致的折射與更好的對比；設定中有 ultra-clear 到 fully tinted 的滑桿（apple.com/os/ios、support 149076） | 提供「Surfaces: Glass／Tinted／Solid」設定，預設跟隨 OS 偏好 |
-| HIG Materials：材質外觀會隨系統設定改變，例如使用者選擇的 Liquid Glass 外觀，或開啟降低透明度、增加對比的 accessibility 設定（2026-10-31 重新讀取原文；初次研究漏看，曾標記 UNKNOWN）。Apple 沒有規定網頁 CSS 該怎麼做 | 本工具自訂的 CSS 規則（不是 Apple 的規格）：`prefers-reduced-transparency: reduce` → Solid；`prefers-contrast: more` → Solid＋1.5px 邊框 |
+| HIG Materials：材質外觀會隨系統設定改變，例如使用者選擇的 Liquid Glass 外觀，或開啟降低透明度、增加對比的 accessibility 設定（2026-10-31 重新讀取原文；初次研究漏看，曾標記 UNKNOWN）。Apple 沒有規定網頁 CSS 該怎麼做 | 本工具自訂的 CSS 規則（不是 Apple 的規格）：`prefers-reduced-transparency: reduce` → Solid；`prefers-contrast: more` → Solid＋1.5px 邊框（規劃，尚未實作） |
 
 ## 3. 兩個版面方向與自評
 
@@ -345,6 +345,7 @@ Unsupported 版本：標題「We can't help with this wallet yet」，列出觸�
 | `warn.paste` | Only paste code you got from this app on this computer. | 只貼上這台電腦上本工具給你的程式碼。 |
 | `footer.unofficial` | Not affiliated with Coinbase or Plasma. | 與 Coinbase、Plasma 無任何關係。 |
 | `footer.credit` | Built by sd0x | 由 sd0x 製作 |
+| `footer.sponsor` | Sponsor this project | 贊助這個專案 |
 
 同一個動作從頭到尾同一個名字：按鈕「Send」→ 狀態「Sending」→ 結果「Sent／Transfer confirmed」。
 
