@@ -11,7 +11,7 @@
 | 形態 | 如何取得 | UI origin | API | 模擬 | 送出 |
 |------|---------|-----------|-----|------|------|
 | Local（fallback，建議） | clone 公開 repo 後 `npm run runner`（`dist-server/runner.mjs`），或 `npm exec --yes --package ./passkey-recovery-<version>.tgz -- passkey-recovery`（目前是自己 `npm pack` 做出的 tgz；Release 尚未發布，也沒上 npm registry） | `http://127.0.0.1:4171` | 同 origin；頁面 meta 內的 session token（`x-cbpr-session`） | runner 內的釘選 Anvil fork | 三種 gas 錢包皆可 |
-| Hosted | `npm run build:hosted` → `dist-hosted/`（靜態＋`_headers`）；**尚未部署** | 官方 https 網站 | 沒有自己的 API；使用者配對本機 runner 後經 `http://127.0.0.1:<port>`（`x-cbpr-pair`） | 只在配對後、由本機 runner 執行；**沒有雲端模擬** | 瀏覽器錢包與瀏覽器 File；native 模式需要 runner 的 signer |
+| Hosted | `npm run build:hosted` → `dist-hosted/`（靜態＋`_headers`）；**已部署**（<https://passkey-recovery.welfree-studio.workers.dev>） | 官方 https 網站 | 沒有自己的 API；使用者配對本機 runner 後經 `http://127.0.0.1:<port>`（`x-cbpr-pair`） | 只在配對後、由本機 runner 執行；**沒有雲端模擬** | 瀏覽器錢包與瀏覽器 File；native 模式需要 runner 的 signer |
 | 舊 sidecar | `npm start`（4173） | `http://127.0.0.1:4173` | 同 origin | 使用者 `PATH` 上的 anvil | 瀏覽器錢包、瀏覽器 File、Terminal signer hand-off |
 
 ```
@@ -41,7 +41,7 @@
 | Signer API | `SIGNER_API`（`src/config/signerApi.ts`，目前 2）：頁面依賴舊 signer 沒有的 endpoint 或欄位時遞增。signer 在 `/gas/status` 回 `api`，沒有這個欄位視為 1。`/gas/status` 不受 busy 阻擋（解鎖等待 1Password 時也回答），頁面因此總能讀到版本；頁面的狀態讀取有順序，較早發出、較晚回來的讀取不會蓋過較新的狀態，舊 signer 的 409 busy 不清除已知狀態。頁面在任何解鎖前比對（`signerCompat`）：還沒讀到時三種 native 模式停用（`gas.opt.waitRunner`），不同即停用並顯示更新指引（§7「Runner 版本不符」），不送出任何解鎖請求；不改走其他錢包、不略過驗證。signer 對未知 endpoint 的 404（不帶 `kind`）在頁面轉為 `runner-outdated`，同一份指引。簽署被拒時 signer 回穩定代碼（`SIGN_REFUSALS`：`sign-locked`、`sign-unconfirmed`、`keystore-changed`、`keystore-stale`、`keystore-key-changed`、`sign-other-wallet`、`sign-bad-tx`、`sign-failed`、`sign-stopped`、`sign-timeout`），sidecar 的部署與轉帳 relay 以 409 的 `kind` 轉給頁面（不認得的代碼一律 `sign-failed`），頁面顯示 `gas.err.<code>` 的 EN／繁中文案，不顯示 signer 的英文原因 |
 | 靜態頁面 | sidecar 在**啟動時**把 `dist/` 讀進記憶體（`server/staticSnapshot.ts` `snapshotDist`：只收一般檔案、略過 symlink、總量上限 64 MiB；沒有 build 時每個頁面請求都 404）。之後 `npm run build` 改寫磁碟上的 `dist/`，執行中的 runner 仍提供啟動時那一版，頁面與同一個 runner 啟動的 sidecar、signer child process 一致（signer 是另一個 process，`server/runner/signerChild.ts`）；要用新 build 必須重新啟動（signer 一起重啟）。2026-11-01 的 `unknown endpoint` 就是舊做法（每次請求讀磁碟）讓新頁面配上記憶體中的舊 signer |
 | 既有 gas 錢包 | `--gas-manifest <絕對路徑>`：public manifest 的位置（預設 `~/.local/share/passkey-recovery/gas-wallet-public.json`，與 Terminal signer 相同）。路徑只在 runner 啟動時決定，頁面送不了路徑 |
-| 官方 origin | `OFFICIAL_ORIGINS` 目前為空（網站未部署）；使用者以 `--allow-origin https://…` 自行加入，exact match、無 wildcard、無 path |
+| 官方 origin | `OFFICIAL_ORIGINS` 目前為空（官方網站已上線，它的 origin 隨下一個 runner 版本加入）；使用者以 `--allow-origin https://…` 自行加入，exact match、無 wildcard、無 path |
 
 ## 3. 配對與本機 API 隔離
 
@@ -226,7 +226,7 @@ sequenceDiagram
 |------|-------------|--------|------|
 | Source build | `npm run build` | `npm run build:hosted` | ✅ 同一版本（`package.json`，目前 0.2.0） |
 | 套件 | `npm pack` tgz，乾淨資料夾安裝執行 | — | ✅ 本機驗證；❌ 未 `npm publish` |
-| 網站 | — | Cloudflare static assets＋`_headers` | ❌ 未部署（待 release 階段；`OFFICIAL_ORIGINS` 空） |
+| 網站 | — | Cloudflare static assets＋`_headers` | ✅ 已部署（2026-11-07；`OFFICIAL_ORIGINS` 仍為空，要加 `--allow-origin`） |
 | Passkey：bookmarklet／DevTools helper | ✅ | ✅（同 UI） | virtual 層驗證；真實 OS Passkey 與書籤列點擊待使用者 |
 | Passkey：extension bridge | ❌（`externally_connectable` 只有 `http://127.0.0.1:4173/*`，舊 sidecar） | ❌ | 沿用 ADR-002；要支援 runner／網站 origin 需改 manifest 並重做 S2 驗證（carryover） |
 | Gas：wallet／browser File | ✅ | ✅ | synthetic 驗證 |

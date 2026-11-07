@@ -12,7 +12,7 @@ Passkey Recovery 在兩個地方執行，介面相同：
 | Gas 錢包：瀏覽器錢包、瀏覽器內 File | 可以 | 可以 |
 | Gas 錢包：File（native）、1Password、既有 gas 錢包 | 只有在與你的本機 runner 配對時（私鑰留在它的 signer） | 可以 |
 
-目前的狀態：原始碼已公開在 [GitHub](https://github.com/sd0xdev/passkey-recovery)；目前沒有可下載的 GitHub Release 或 tarball；網站尚未部署。部署前請使用本機 runner，從 clone 建置（§2a）。
+目前的狀態：原始碼已公開在 [GitHub](https://github.com/sd0xdev/passkey-recovery)；目前沒有可下載的 GitHub Release 或 tarball；網站已上線於 [passkey-recovery.welfree-studio.workers.dev](https://passkey-recovery.welfree-studio.workers.dev)，只提供靜態頁面。無論如何，工具都需要本機 runner，從 clone 建置（§2a）。
 
 ## 1. 需求
 
@@ -87,7 +87,7 @@ Passkey Recovery 在兩個地方執行，介面相同：
 
 ## 4. 讓網站與你的 runner 配對
 
-1. 網站尚未部署，所以這一節適用於你自己架設的網站，或之後的官方網站。以 `--allow-origin https://<網站 origin>` 啟動 runner（從原始碼：`npm run runner -- --allow-origin https://<網站 origin>`）；網站的 Download 頁面會顯示完整命令。
+1. 以網站的完整 origin 啟動 runner。官方網站從原始碼啟動的命令是：`npm run runner -- --allow-origin https://passkey-recovery.welfree-studio.workers.dev`。這個版本的 runner 沒有預設允許配對的網站 origin，所以一定要加這個參數；你自己架設的網站同樣用它自己的 origin。網站的 Download 頁面會顯示完整命令。
 2. 在網站開啟 **Recover**，按 **連接 runner**（英文介面為 Connect runner），輸入終端機顯示的 `XXXX-XXXX` 代碼。
 3. 配對只存在該分頁；閒置 30 分鐘、重新整理或 runner 結束時即失效。
 

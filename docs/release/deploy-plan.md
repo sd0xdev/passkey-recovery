@@ -1,8 +1,10 @@
 # Website deploy plan
 
-The website is the static build `dist-hosted/` served by **Cloudflare Workers Static Assets** on a `workers.dev` subdomain. There is no Worker script, binding, analytics or log collection. Configuration: [`wrangler.jsonc`](../../wrangler.jsonc); Wrangler is pinned as an exact devDependency.
+The website is the static build `dist-hosted/` served by **Cloudflare Workers Static Assets** on a `workers.dev` subdomain. This project adds no Worker script, binding, analytics or log collection. Configuration: [`wrangler.jsonc`](../../wrangler.jsonc); Wrangler is pinned as an exact devDependency.
 
-**Status: not deployed.** Nothing in CI deploys; the steps below are run by the maintainer.
+**Status: deployed at <https://passkey-recovery.welfree-studio.workers.dev>.** First deployed 2026-11-07 from public commit `3a43d6d`, version `02179f54-974f-46b5-b31a-26399debd941`; the read-back below passed. Later commits that change no served file do not need a new deploy. Nothing in CI deploys; the steps below are run by the maintainer.
+
+The read-back covers this site, not a recovery: the pairing check used a disposable runner and a synthetic address, with nothing signed or sent. Cloudflare adds its own response headers to the live site, including `Report-To` and `NEL` (browser network error reports to Cloudflare). They do not come from `dist-hosted/_headers`, and the pages do not load anything for them.
 
 ## Before deploying
 
@@ -45,9 +47,9 @@ The deploy counts as done only after these checks pass against the live URL:
 
 ## After the read-back
 
-1. Update the README, the install guides and this plan from "not deployed" to the live URL. The website's own pages describe it without a deployment claim, so this edit changes no served file; rebuild and compare to confirm.
+1. Update the status in the README, the install guides and this plan. The website's own pages describe it without a deployment claim, so this edit changes no served file; rebuild and compare to confirm.
 2. Later, with the next runner version: add the exact live origin to `OFFICIAL_ORIGINS` in `server/runner/runner.ts`, so the runner pairs with the official website without `--allow-origin`. That is a code change: review, test and ship it. Until then the Download page shows the `--allow-origin` command for this exact address.
 
 ## Rollback
 
-Name the same account and auth profile as the deploy. `npx wrangler rollback` returns to the previous version, which exists only after a second deploy; for a failed first deploy, `npx wrangler delete` takes the site down. The runner keeps working locally either way.
+Name the same account and auth profile as the deploy. `npx wrangler rollback` returns to the previous version, which exists only after a second deploy; while only one version exists, `npx wrangler delete` takes the site down. The runner keeps working locally either way.

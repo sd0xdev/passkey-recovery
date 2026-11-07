@@ -72,7 +72,9 @@ describe('public entry documents', () => {
     const text = readFileSync(join(ROOT, name), 'utf8');
     expect(text).toMatch(/source code is public/i);
     expect(text).toMatch(/no (tag, )?GitHub Release/i);
-    expect(text).toMatch(/website is not deployed/i);
+    expect(text).toMatch(/website is live/i);
+    expect(text).toContain('https://passkey-recovery.welfree-studio.workers.dev');
+    expect(text).not.toMatch(/website is not deployed/i);
     expect(text).not.toMatch(/repository (and its \w+ ?\w* )?(is|are) not (published|public)/i);
   });
 
@@ -80,7 +82,9 @@ describe('public entry documents', () => {
     const text = readFileSync(join(ROOT, name), 'utf8');
     expect(text).toContain('原始碼已公開');
     expect(text).toMatch(/沒有.*GitHub Release/);
-    expect(text).toContain('網站尚未部署');
+    expect(text).toContain('網站已上線');
+    expect(text).toContain('https://passkey-recovery.welfree-studio.workers.dev');
+    expect(text).not.toContain('網站尚未部署');
     expect(text).not.toMatch(/repository.*(還沒有|尚未)(發布|公開)/);
   });
 

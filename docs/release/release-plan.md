@@ -2,7 +2,7 @@
 
 How a version of Passkey Recovery becomes public. Every step below that publishes something is a **maintainer action**; nothing in this repository's scripts publishes, tags, uploads or deploys on its own.
 
-**Current state:** the source repository is public and its CI runs (steps 1–2 below). No tag, GitHub Release or tarball exists, and the website is not deployed (steps 3–5 have not run).
+**Current state:** the source repository is public and its CI runs (steps 1–2 below). The website is deployed ([deploy-plan.md](deploy-plan.md)), ahead of any Release. No tag, GitHub Release or tarball exists (steps 3–4 have not run).
 
 ## What a release contains
 
@@ -39,7 +39,7 @@ npm run release:pack-smoke        # npm pack + real npm exec in a clean folder w
 2. Let CI pass on the public repository.
 3. Tag `v<version>` and create the GitHub Release. Upload the tarball from `release-out/` and paste its sha256 into the notes.
 4. Download the asset from the release page, recompute its sha256 and compare it to `release-out/` (read-back).
-5. Deploy the website ([deploy-plan.md](deploy-plan.md)). Until the website is deployed and read back, the README and the site describe it as not deployed.
+5. Deploy the website again if its files changed ([deploy-plan.md](deploy-plan.md)). The status in the README and the install guides changes only after the read-back passes.
 
 ## Versioning
 

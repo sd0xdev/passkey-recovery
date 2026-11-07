@@ -42,7 +42,7 @@ You need Git, Node.js **24.22.1** and npm **11.19.1**. Full steps: [docs/INSTALL
 |-|--------|
 | Source code | The source code is public: [github.com/sd0xdev/passkey-recovery](https://github.com/sd0xdev/passkey-recovery) |
 | Runner package | Not published: there is no GitHub Release or tarball to download yet, and it is not on the npm registry |
-| Website | The website is not deployed yet |
+| Website | The website is live: [passkey-recovery.welfree-studio.workers.dev](https://passkey-recovery.welfree-studio.workers.dev). It serves static pages only; to use the tool, build and start the runner on your computer |
 
 So the way in is a clone of the source:
 
@@ -80,7 +80,7 @@ Details: [SECURITY.md](SECURITY.md) and [docs/features/open-source-recovery/3-ar
 
 ## Status
 
-Version 0.2.0: public source, no published Release, website not deployed (see [Install and run](#install-and-run)). The method this tool automates recovered one real Coinbase Smart Wallet v1.1 on Plasma; with the tool itself, one mainnet transfer has been made and checked using the runner's existing gas wallet mode (keystore + 1Password); the other gas modes are tested only on synthetic test chains. Not audited. A local or fork simulation is not mainnet: only a transaction you sent and that **Track** shows as `confirmed` or `final` reflects the chain.
+Version 0.2.0: public source, no published Release, website live (see [Install and run](#install-and-run)). The method this tool automates recovered one real Coinbase Smart Wallet v1.1 on Plasma; with the tool itself, one mainnet transfer has been made and checked using the runner's existing gas wallet mode (keystore + 1Password); the other gas modes are tested only on synthetic test chains. Not audited. A local or fork simulation is not mainnet: only a transaction you sent and that **Track** shows as `confirmed` or `final` reflects the chain.
 
 ## Development
 

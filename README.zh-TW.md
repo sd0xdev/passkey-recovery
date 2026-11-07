@@ -42,7 +42,7 @@ Passkey 只能替它所屬的網站簽署，所以簽署發生在 Coinbase 自�
 |-|------|
 | 原始碼 | 原始碼已公開：[github.com/sd0xdev/passkey-recovery](https://github.com/sd0xdev/passkey-recovery) |
 | Runner 套件 | 尚未發布：目前沒有可下載的 GitHub Release 或 tarball，也沒有上 npm registry |
-| 網站 | 網站尚未部署 |
+| 網站 | 網站已上線：[passkey-recovery.welfree-studio.workers.dev](https://passkey-recovery.welfree-studio.workers.dev)。它只提供靜態頁面；要使用工具，請在你的電腦上建置並啟動 runner |
 
 所以請從 clone 原始碼開始：
 
@@ -80,7 +80,7 @@ Runner 只綁 `127.0.0.1`，第一次需要模擬時才啟動 sha256 釘選的 A
 
 ## 狀態
 
-版本 0.2.0：原始碼已公開、沒有已發布的 Release、網站尚未部署（見[安裝與執行](#安裝與執行)）。這個工具自動化的方法曾救回 Plasma 上一個真實的 Coinbase Smart Wallet v1.1；工具本身已用 runner 的「既有 gas 錢包（keystore＋1Password）」模式完成並核對一筆 mainnet 轉帳；其他 gas 模式只在 synthetic 測試鏈上測試過。尚未經過稽核。本機或 fork 模擬不等於 mainnet：只有你送出、且 **Track** 顯示 `confirmed` 或 `final` 的交易才代表鏈上狀態。
+版本 0.2.0：原始碼已公開、沒有已發布的 Release、網站已上線（見[安裝與執行](#安裝與執行)）。這個工具自動化的方法曾救回 Plasma 上一個真實的 Coinbase Smart Wallet v1.1；工具本身已用 runner 的「既有 gas 錢包（keystore＋1Password）」模式完成並核對一筆 mainnet 轉帳；其他 gas 模式只在 synthetic 測試鏈上測試過。尚未經過稽核。本機或 fork 模擬不等於 mainnet：只有你送出、且 **Track** 顯示 `confirmed` 或 `final` 的交易才代表鏈上狀態。
 
 ## 開發
 
